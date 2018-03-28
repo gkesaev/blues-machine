@@ -1,11 +1,16 @@
 body{
-    background-color: blueviolet;
+    background-color: white;
 }
-
+.keyboard-сontainer{
+    border: 1px dotted gray;
+    border-radius: 10px;
+    position: absolute;
+}
 .key{
     display: inline-block;
     vertical-align: top;
-    border: 1px solid black;
+    border: 1px solid #d0d0d0;
+    cursor: pointer;
     position: relative;
 }
 .black-key{
@@ -16,9 +21,15 @@ body{
     margin-right: -25px;
     z-index: 10;
 }
+.black-key:active{
+    background-color: #333333;
+}
 .white-key{
     background-color: white;
     width:65px;
     height: 180px;
     z-index: 5;
+}
+.white-key:active{
+    background-color: whitesmoke;
 }
