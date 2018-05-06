@@ -79,9 +79,7 @@ there is almost no need to ever use  ```<br>```
 
 + ```display: inline-block;``` vs ```block```
 
-in chrome to change values, for example CSS width, SHIFT + arrow Up/Down or Alt + arrow Up/Down
+in chrome to change values, for example CSS width, <dl><kbd>Shift</kbd> + <kbd>↓</kbd> / <kbd>↑</kbd></dl> or
+<dl><kbd>Alt</kbd> + <kbd>↓</kbd> / <kbd>↑</kbd></dl> for decimals
 
 to remove space between to inline elements one can comment out the space in html code
-<dl>
-<kbd>CTRL</kbd>+<kbd>Z</kbd>
-</dl>
