@@ -82,3 +82,6 @@ there is almost no need to ever use  ```<br>```
 in chrome to change values, for example CSS width, SHIFT + arrow Up/Down or Alt + arrow Up/Down
 
 to remove space between to inline elements one can comment out the space in html code
+<dl>
+<kbd>CTRL</kbd>+<kbd>Z</kbd>
+</dl>
