@@ -6,25 +6,38 @@
     <title>Blues Machine</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="resources/style.css" />
-    <script src="main.js"></script>
+    <script src="resources/main.js"></script>
 </head>
 <body>
-    
-<div class="keyboard-сontainer">
-    <div class="white-key key"></div>
-    <div class="black-key key"></div>
-    <div class="white-key key"></div>
-    <div class="black-key key"></div>
-    <div class="white-key key"></div>
-    <div class="white-key key"></div>
-    <div class="black-key key"></div>
-    <div class="white-key key"></div>
-    <div class="black-key key"></div>
-    <div class="white-key key"></div>
-    <div class="black-key key"></div>
-    <div class="white-key key"></div>
-</div>
+    <audio class="note-a1" source src="resources/mp3/a1.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-a1s" source src="resources/mp3/a1s.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-b1" source src="resources/mp3/b1.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-c1" source src="resources/mp3/c1.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-c1s" source src="resources/mp3/c1s.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-c2" source src="resources/mp3/c2.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-d1" source src="resources/mp3/d1.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-d1s" source src="resources/mp3/d1s.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-e1" source src="resources/mp3/e1.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-f1" source src="resources/mp3/f1.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-f1s" source src="resources/mp3/f1s.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-g1" source src="resources/mp3/g1.mp3" type="audio/mpeg" ></audio>
+    <audio class="note-g1s" source src="resources/mp3/g1s.mp3" type="audio/mpeg" ></audio>
 
+    <h1 class="center">Blues Machine</h1>
+    <div class="keyboard-сontainer">
+        <div class="white-key key" onclick="playNote('note-a1')"></div>
+        <div class="black-key key" onclick="playNote('note-a1s')"></div>
+        <div class="white-key key" onclick="playNote('note-b1')"></div>
+        <div class="black-key key" onclick="playNote('note-c1')"></div>
+        <div class="white-key key" onclick="playNote('note-c1s')"></div>
+        <div class="white-key key" onclick="playNote('note-c2')"></div>
+        <div class="black-key key" onclick="playNote('note-d1')"></div>
+        <div class="white-key key" onclick="playNote('note-d1s')"></div>
+        <div class="black-key key" onclick="playNote('note-e1')"></div>
+        <div class="white-key key" onclick="playNote('note-f1')"></div>
+        <div class="black-key key" onclick="playNote('note-f1s')"></div>
+        <div class="white-key key" onclick="playNote('note-g1')"></div>
+    </div>
 
 </body>
 </html>
