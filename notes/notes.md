@@ -40,7 +40,7 @@ in VSCODE open new html file and type "!" then press "TAB" to get autocomplete
 
 http is communication protocol
 
-protcol user info
+protocol user info
   |         |
 http://user:password@www.example.com:80/search?q=term&lang=en#results
 
@@ -51,7 +51,7 @@ $ http-server
 ```
 OR
 
-install Live Server addon to VScode and run it with command:
+install Live Server addon to VSCode and run it with command:
 ctrl + shift + p :> live server
 
 back to styles:
@@ -83,3 +83,35 @@ in chrome to change values, for example CSS width, <dl><kbd>Shift</kbd> + <kbd>�
 <dl><kbd>Alt</kbd> + <kbd>↓</kbd> / <kbd>↑</kbd></dl> for decimals
 
 to remove space between to inline elements one can comment out the space in html code
+
+# Lesson 2
+### (same presentation)
+
+Nowadays we should always check our website on a mobile
+to give optimal viewing experience we should _instruct_ browser to display based on mobile screen size (and not widescreen + zoom out)
+```
+<meta name="viewport" content="width=device-width">
+```
+
+we should take into account image quality when dealing with mobile screens, for example retina display has a lot of pixels, so we need to adjust an image of right size.
+
+to test website on a mobile device it is suggested to use Live Server on the same LAN network.
+
+to get css into a separate file:
+```<link rel="stylesheet" href="main.css">```
+another way to change style is inline: ```<h1 style="color: orange;">Hey</h1>```, better not to use it
+
+browser has to decide on the specificity and inline css is very high/important in that order, so better not to use it.
+
+## UI Foundation - HTML
+### (new presentation)
+
+good HTML
+make sure that:
+1. Cross browser
+2. Cross platform
+3. accessible
+4. SEO friendly (search engines)
+5. Dev friendly
+6. Future friendly
+
