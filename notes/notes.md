@@ -155,7 +155,7 @@ search engines and screen readers do not "care" of classes
 ### class names
 how to name them?
 
-```class="Link--external"
+```class="Link--external"```
 so naming convention will add details along the name
 
 So why use conventions:
@@ -169,11 +169,102 @@ Our name convention is called [Suits](https://github.com/suitcss/suit/blob/maste
 another one more used is Bam
 examples:
 ```
-.MyComponent {}
-.MyComponent.is-animating {}
-.MyComponent--modifier {}
+<style>
+  .MyComponent {}
+  .MyComponent.is-animating {}
+  .MyComponent--modifier {}
 
-.MyComponent-part {}
-.MyComponent-anotherPart {}
+  .MyComponent-part {}
+  .MyComponent-anotherPart {}
+<style>
+```
+<body>
+  <h1 class="MyComponent MyComponent-part">Some Heading</h1>
+</body>
 ```
 
+state classes such as ```.is-active{}``` should never change global styling, because they are mostly used in some
+specific cases and once changed should not interact with whole page.
+
+Example from their help.md
+```
+<article class="Tweet">
+  <header class="Tweet-header">
+    <img class="Tweet-avatar" src="{{src}}" alt="{{alt}}">
+    …
+  </header>
+  <div class="Tweet-bodyText">
+    …
+  </div>
+</article>
+```
+Media blocks can be organized in advance in CSS and the only rearrange HTML
+
+Class names should describe design and not content
+[suggested reading](http://nicolasgallagher.com/about-html-semantics-front-end-architecture/)
+
+
+# Lesson 3
+### UI Foundation - CSS
+
+```
+h1                        {}  /* <h1>...</h1> */
+.Button                   {}  /* <* class="Button">...</*> */
+button.Button             {}  /* <button class="Button">...</button> */
+.Button.Button--primary   {}  /* <* class="Button Button--primary">...</*> */
+a[href$=".org"]           {}  /* <a href="https://wordpress.org/">...</a>*/
+#input-5572               {}  /* <* id="input-5572">...</*> */    /* not suggested to use */
+```
+######More Selectors:
++ Descendant selector
+```
+/*
+ <div>
+   <span></span>    <!-- this one -->
+   <p>
+     <span></span>  <!-- this one -->
+   </p>
+ </div>
+*/
+div span  {}
+
+```
++ Child selector
+```
+/*
+ <div>
+   <span></span>   <!-- this one -->
+   <p>
+     <span></span>  <!-- but NOT this one -->
+   </p>
+ </div>
+*/
+div > span  {}
+```
++ Adjacent selector
+choose tr only next to another tr, example use: zebra slice a table
+```
+/*
+ <table>
+   <tr></tr>
+   <tr></tr>    <!-- this one -->
+   <tr></tr>
+   <tr></tr>    <!-- this one -->
+ </table>
+*/
+tr + tr  {}
+```
+
++ Nth-child selector
+```
+/*
+ <table>
+   <tr></tr>    <!-- this one -->
+   <tr></tr>
+   <tr></tr>    <!-- this one -->
+   <tr></tr>
+   <tr></tr>    <!-- this one -->
+ </table>
+*/
+tr:nth-child(2n+1) {}
+```
