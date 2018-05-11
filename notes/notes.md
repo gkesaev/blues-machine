@@ -115,3 +115,65 @@ make sure that:
 5. Dev friendly
 6. Future friendly
 
+good page design starts from HTML, from big to small
+
+page level semantics: header, footer, "under header", mid section, highlights
+separate components by context
+smaller components include menu in header, links in footer...
+
+Process of separating ui into subparts called Atomic Design
+
+"we are not designing pages, we're designing systems"   -- Stephen Hay
+
+html5docotor.com/downloads/h5d-sectioning-flowchart.pdf
+
+screen reader can create a document outline when heading (h1-h6) used, which provides a better UX for screen reader
+So provide relevant heading and tags.
+Headers size is important in html tree
+
+to test accessability: wave.webaim.org
+
+headers and footers can include headers and footers of their own.
+
+```<nav>``` suits navigation links
+```<article>``` can be standalone
+
+text level semantics:
+```h1,h2... , p```
+```<ul><li>```
+li - list item
+ul - unordered list
+ol - ordered list
+
+```<small>``` - "small text"
+
+## additional tags
+
+example ```class="external"```
+search engines and screen readers do not "care" of classes
+
+### class names
+how to name them?
+
+```class="Link--external"
+so naming convention will add details along the name
+
+So why use conventions:
+- Clear intent
+- Easier targeting in CSS
+- Higher maintainability
+-  --//-- scalability
+-  --//-- usability
+
+Our name convention is called [Suits](https://github.com/suitcss/suit/blob/master/doc/naming-conventions.md)
+another one more used is Bam
+examples:
+```
+.MyComponent {}
+.MyComponent.is-animating {}
+.MyComponent--modifier {}
+
+.MyComponent-part {}
+.MyComponent-anotherPart {}
+```
+
