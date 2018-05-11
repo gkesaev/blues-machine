@@ -215,7 +215,7 @@ button.Button             {}  /* <button class="Button">...</button> */
 a[href$=".org"]           {}  /* <a href="https://wordpress.org/">...</a>*/
 #input-5572               {}  /* <* id="input-5572">...</*> */    /* not suggested to use */
 ```
-#####More Selectors:
+##### More Selectors:
 + Descendant selector
 ```
 /*
@@ -347,7 +347,7 @@ to address a custom attribute in css use square brackets:
 [am-Button]{ }
 ```
 
-###variables in CSS
+### variables in CSS
 - definition
   ```
   :root {
@@ -364,11 +364,87 @@ it is a good idea to put root in a different file and from there to config all t
 
 so this is how folder tree should look like:
 ```
-  -index.css
-  -config.css
-  -styles:
-    -base
-    -components
-    -themes
-    -utils
+  index.css
+  config.css
+  /styles:
+    /utils
+      type.css
+      space.css
+    /base
+    /components
+      button.css
+    /themes
+      light.css
 ```
+# Lesson 4
+### Responsive Foundation
+
+Remember HTML is responsive by itself, and if it is not --> you ruined it.
+
+There are 2 ways to display elements:
+```
+p {
+  display: inline;
+}
+
+a {
+  display: block;
+}
+```
+
+Units to measure sizes of elements:
+- px
+- %
+- em/rem
+
+calculation example using CSS vars:
+```
+.Button {
+   display: inline-block;
+   padding: calc(var(--space)/2) var(--space);
+}
+```
+
+#### box model
+<pre>
+      margin
+-----border------
+|   padding     |
+|   *content*   |
+|_______________|
+</pre>
+
+Initial value of blocks is: ```{ width: auto;}```
+
+It is a good idea to calc the size of an element as a dependence of font size.
+
+###### Why use Ems:
+- Design looks good since the space around content is proportional to the letter size for each element automatically
+- Spacing adjusts automatically when font-size is changed at a higher level (e.g. page scope or component scope)
+
+It is a good idea to use **one** variable for all spaces:
+```
+:root {
+  --space: 1em;
+}
+body {
+  padding: var(--space);
+}
+h1 {
+  margin: calc(var(--space)/2) 0;
+}
+
+```
+
+Setting a "break point"
+defining the size according to scree size:
+```
+/* Mobile-first breakpoint */
+@media (min-width: 1000px) {
+  html {
+    font-size: 1.5rem;
+  }
+}
+```
+[100% correct way to do breakpoints](https://medium.freecodecamp.org/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862)
+or [local](/materials/breakpoints.png)
