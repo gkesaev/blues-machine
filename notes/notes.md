@@ -215,7 +215,7 @@ button.Button             {}  /* <button class="Button">...</button> */
 a[href$=".org"]           {}  /* <a href="https://wordpress.org/">...</a>*/
 #input-5572               {}  /* <* id="input-5572">...</*> */    /* not suggested to use */
 ```
-######More Selectors:
+#####More Selectors:
 + Descendant selector
 ```
 /*
@@ -268,3 +268,63 @@ tr + tr  {}
 */
 tr:nth-child(2n+1) {}
 ```
+also:
+```
+:first/:last-child
+:odd/even
+```
+
++ General Sibling
+```
+/*
+ <p></p>
+ <ul></ul>
+ <button></button>    <!-- this one -->
+ <button></button>    <!-- this one -->
+*/
+p ~ button {}
+```
+
+A game to train on CSS: [CSS Diner](https://flukeout.github.io/)
+
+We would lie to keep specificity low: [Specificity calculator](https://specificity.keegan.st/)
+
+CSS - cascading style sheets
+
+to check inheritance go to slides or web
+to check which properties are inherited go to [devdocs.io](http://devdocs.io/)
+
+every(maybe not every) element has initial value, it is used like this: ``` h1 { color: initial;}```
+
+sometimes we want for element to inherit new property and not to use initial, then theres is ```inherit``` option.
+
+__Style branches not leaves__
+
+Use dynamic values such as currentColor and ems
+
+Suggested reading [Simurai’s Blog](http://simurai.com/blog/2015/09/09/back-to-the-roots)
+
+Web design is content driven
+
+Default font size in most browsers is 16px
+Users can edit this setting in browser.
+
+Pixel is dependent on the screen size and specific ot this screen size. Once font size is set in pixels user cannot edit its size in the browser settings (he can scale it up ctrl + "+", but font size changes in settings wont effect it)
+
+1em = 16px, 2em = 32px...
+so em is calculated from the default browser font size, very good for accessibility
+
+ems have side effects, they calculated in consideration of inherited em size, so span in span will lead to bigger(smaller) font.
+
+to solve this there is Rem (or root em)
+
+Method for sizing fonts:
+Sizing fonts:
+
+  - Base font size set on root element .type-sizeBase (in em/rem)
+  - Create a global size scale (e.g. .type-size1, type-size2, …) set in rem
+  - Font sizes inside components should be styled with em to maintain components scope and allow to adjust component proportionally
+Sizing space:
+  - Space should (most of the time) depend of font-size, hence use ems for margins, paddings, radius, etc.
+
+For example for button styling it is preferable to use em and not rem, because it will take the base value from root.
