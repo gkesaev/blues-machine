@@ -328,3 +328,47 @@ Sizing space:
   - Space should (most of the time) depend of font-size, hence use ems for margins, paddings, radius, etc.
 
 For example for button styling it is preferable to use em and not rem, because it will take the base value from root.
+
+Each class defines something specific, i.e. class that define background wont define font as well.
+
+It is a good idea to create custom attribute instead of writing a bunch of classes
+so for example
+```
+<a am-Button class="reset-link border-size" href="/">
+```
+instead of
+```
+<a class="Button red-button reset-link border-size..." href="/">
+```
+currently there is no way to composite CSS classes into one class only in CSS
+
+to address a custom attribute in css use square brackets:
+```
+[am-Button]{ }
+```
+
+###variables in CSS
+- definition
+  ```
+  :root {
+    --c-blue: navy;
+  }
+  ```
+- usage
+  ```
+  .theme-dark[c-Page] {
+    background-color: var(--c-blue);
+  }
+  ```
+it is a good idea to put root in a different file and from there to config all the settings of the page.
+
+so this is how folder tree should look like:
+```
+  -index.css
+  -config.css
+  -styles:
+    -base
+    -components
+    -themes
+    -utils
+```
