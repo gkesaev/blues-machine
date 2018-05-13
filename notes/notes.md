@@ -1,5 +1,7 @@
 
 # Lesson 1
+[Course Overview](https://docs.google.com/presentation/d/1ECAbfpReLg_TPvc1CTlVv4Lk_TKhwGDRo8ZdzEalixA/edit)
+
 browser can identify themselves while getting files from server, it is a bad practice to use that info. there are better ways to check what is the functionality of a curtain browser (via javascript)
 
 To go down one line of text there is no need to use <br> tag, instead use "enter" and  comment between the lines to reduce the distance between the lines.
@@ -85,7 +87,7 @@ in chrome to change values, for example CSS width, <dl><kbd>Shift</kbd> + <kbd>�
 to remove space between to inline elements one can comment out the space in html code
 
 # Lesson 2
-### (same presentation)
+### [(same presentation)](https://docs.google.com/presentation/d/145-UtJlO7TihbODxoBURNBbeUoYQ6kgKxuS_0-2xqGE/edit#slide=id.p)
 
 Nowadays we should always check our website on a mobile
 to give optimal viewing experience we should _instruct_ browser to display based on mobile screen size (and not widescreen + zoom out)
@@ -205,7 +207,7 @@ Class names should describe design and not content
 
 
 # Lesson 3
-### UI Foundation - CSS
+### [UI Foundation - CSS](https://docs.google.com/presentation/d/16g85f7JqSw2PnWduqbvj19dU-H-eWuSYPtRmPUw8Hbg/edit#slide=id.p)
 
 ```
 h1                        {}  /* <h1>...</h1> */
@@ -377,7 +379,7 @@ so this is how folder tree should look like:
       light.css
 ```
 # Lesson 4
-### Responsive Foundation
+### [Responsive Foundation](https://docs.google.com/presentation/d/1QteFD0h7wOkdpMOu_XES_EsJXCpitTqGWfIMjSyIQFA/edit#slide=id.p)
 
 Remember HTML is responsive by itself, and if it is not --> you ruined it.
 
@@ -446,5 +448,84 @@ defining the size according to scree size:
   }
 }
 ```
+
+### Use em’s for breakpoint sizes!
+
 [100% correct way to do breakpoints](https://medium.freecodecamp.org/the-100-correct-way-to-do-css-breakpoints-88d6a5ba1862)
 or [local](/materials/breakpoints.png)
+
+
+### How dow we put elements side by side
+CSS has 5 layout modes:
+- normal flow (up until now in lectures)
+- grid
+- flexbox
+- absolute positioning
+- floats
+
+Layout Modes Usage Cascade
+
+- Start with a Normal Flow foundation (like we did in this class)
+- Use Grid for page-scope / large-scale layout
+- Use Flexbox for laying out items within a container
+- Use Positioning for laying out layered elements like modal dialogs, dropdown menus, tooltips, etc. that shouldn’t affect the position/layout of all other elements in the page.
+- Use Floats to float text around a media block.
+
+grid is 2-dimensional most suitable for big elements
+inside a grid one should use flexbox, works in one axis
+positioning provides 3 axis (depth), used for example for menu, when you open a menu it doesn't move the rest of the page, or pop ups, chats...
+floats are mostly used to fix a text around an image
+
+layout is a design feature.
+
+##### side note, one could check if browser supports feature like this:
+```@supports (display: grid)```
+
+grid example code:
+```
+@supports (display: grid) {
+   @media (min-width: 62em) {
+       .Page {
+           display: grid;
+           grid-template-areas:
+               "header header"
+               "main aside";
+           grid-template-rows: 20% 1fr;
+           grid-template-columns: 80% 1fr;
+           grid-gap: var(--space);        /* we touched on space variable before */
+       }
+
+       .Page-header    { grid-area: header; }
+       .Page-main      { grid-area: main; }
+       .Page-aside     { grid-area: aside; }
+   }
+/*___________________________________________________*/
+
+   @media (min-width: 1000px){
+     .Products {
+       grid-template-columns: repeat(2, 1fr)
+     }
+   }
+
+   @media (min-width: 1200px){
+     .Products {
+       grid-template-columns: repeat(3, 1fr)
+     }
+   }
+}
+```
+the nex two line of code are identical
+```grid-template-columns: 1fr 1fr;```
+```grid-template-columns: repeat(2, 1fr;)```
+game links to learn grids:
+- [https://cssgridgarden.com/](https://cssgridgarden.com/)
+- [https://learncssgrid.com/](https://learncssgrid.com/)
+- [http://flexboxfroggy.com/](http://flexboxfroggy.com/)
+
+a lot of tricks and tips in the [video](https://www.youtube.com/watch?v=4pbYJq4eBoI&feature=em-share_video_user) (only visible to allowed users)
+
+[CodePen](https://codepen.io/sergelerner/full/jEWmbE/)
+
+# Lesson 5
+### [Interaction with JS](https://docs.google.com/presentation/d/1QteFD0h7wOkdpMOu_XES_EsJXCpitTqGWfIMjSyIQFA/edit#slide=id.p)
+
