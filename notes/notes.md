@@ -179,7 +179,7 @@ examples:
   .MyComponent-part {}
   .MyComponent-anotherPart {}
 <style>
-```
+
 <body>
   <h1 class="MyComponent MyComponent-part">Some Heading</h1>
 </body>
@@ -529,3 +529,73 @@ a lot of tricks and tips in the [video](https://www.youtube.com/watch?v=4pbYJq4e
 # Lesson 5
 ### [Interaction with JS](https://docs.google.com/presentation/d/1QteFD0h7wOkdpMOu_XES_EsJXCpitTqGWfIMjSyIQFA/edit#slide=id.p)
 
+javascript is interpreted language, in modern browsers there is addition of JIT (just in time) compilation of curtain parts of the code, as well as other optimizations.
+
+Javascript can access the page, and it can change the page.
+
+```
+document.querySelector('h1').style.color = 'red';
+document.querySelector('p').textContent = `I was here at ${new Date()}`;
+document.querySelector('a').style.fontSize = `${Math.max(16, 18)}px`;
+```
+
+Dynamic strings are only available in newer browsers but there is a way to compile it so it will work on older browsers.
+
+There is a range of built in math functions in JS for example, max, avg..
+
+There are 3 types of variables in JS:
+1. let - only for a curtain block
+2. var - global variable
+3. const - cant' be changed after initialization
+
+```
+let grade = 85;
+const FACTOR = 1.2;
+
+console.log(grade * FACTOR); // 102
+
+grade = 90;
+console.log(grade * FACTOR); // 108
+
+FACTOR = 1.5; // TypeError: Assignment to constant variable.
+```
+
+Arrays:
+```
+let grades = [50, 75, 83];
+
+console.log(grades.length); // 3
+console.log(grades[1]); // 75
+
+grades.push(42);
+console.log(grades[3]); // 42
+
+grades.pop();
+console.log(grades.length); // 3
+```
+```
+// Object-literal notation
+let studentGrade = { name: 'Einstein', grade: 50 };
+
+// Can add/change props at runtime
+let studentGrade = {};
+studentGrade.name = 'Einstein';
+studentGrade.grade = 50;
+
+// Can access with dot or as a key
+studentGrade.name === studentGrade['name'];
+```
+```
+let grades = [
+   { name: 'Einstein', grade: 50 },
+   { name: 'Freud', grade: 88 },
+];
+
+// Use a hash table
+let gradesHash = {
+   'Einstein': 50,
+   'Freud': 88
+};
+
+console.log(Object.keys(gradesHash)); // ['Einstein', 'Freud']
+```
