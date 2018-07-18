@@ -1,10 +1,30 @@
-//import { WSAVERNOTSUPPORTED } from "constants";
+var context = new AudioContext();
+
+var notes = [1175, 2794, 220, 240, 340, 500, 144];
+var duration = 1;
+var interval = 2;
+
+function play(frequency, time) {
+    let o = context.createOscillator();
+    let g = context.createGain();
+    o.connect(g);
+    g.connect(context.destination);
+    g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + duration + time);
+    o.frequency.value = frequency;
+    o.start(time);
+}
 
 var buffer = [];
 
-function playNote(note){
-    var note = document.querySelector('.' + note);
-    note.play();
+function playNote(noteClass, noteName){
+    buffer.push(noteName.toUpperCase());
+    document.querySelector('.chosen-keys').innerHTML = buffer.join(", ");
+
+    // var note = document.querySelector('.' + note);
+    // note.play();
+    for (let i = 0; i < notes.length; i++) {
+        play(notes[i], i * interval);
+    }
 }
 
 function saveNote(note, buffer){
