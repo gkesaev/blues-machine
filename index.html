@@ -23,21 +23,50 @@
     <audio class="note-g1" source src="resources/mp3/g1.mp3" type="audio/mpeg" ></audio>
     <audio class="note-g1s" source src="resources/mp3/g1s.mp3" type="audio/mpeg" ></audio>
 
-    <h1 class="center">Blues Machine</h1>
-    <div class="keyboard-сontainer">
-        <div class="white-key key" onclick="playNote('note-a1')"></div>
-        <div class="black-key key" onclick="playNote('note-a1s')"></div>
-        <div class="white-key key" onclick="playNote('note-b1')"></div>
-        <div class="black-key key" onclick="playNote('note-c1')"></div>
-        <div class="white-key key" onclick="playNote('note-c1s')"></div>
-        <div class="white-key key" onclick="playNote('note-c2')"></div>
-        <div class="black-key key" onclick="playNote('note-d1')"></div>
-        <div class="white-key key" onclick="playNote('note-d1s')"></div>
-        <div class="black-key key" onclick="playNote('note-e1')"></div>
-        <div class="white-key key" onclick="playNote('note-f1')"></div>
-        <div class="black-key key" onclick="playNote('note-f1s')"></div>
-        <div class="white-key key" onclick="playNote('note-g1')"></div>
-    </div>
+    <header>
+        <h1 class="center">Blues Machine</h1>
+    </header>
+    <div class="main-container">
+        <div class="keyboard-сontainer">
+            <div class="white-key key" onmousedown="playNote('note-a1', event)"  ></div>
+            <div class="black-key key" onmousedown="playNote('note-a1s', event)" ></div>
+            <div class="white-key key" onmousedown="playNote('note-b1', event)"  ></div>
+            <div class="black-key key" onmousedown="playNote('note-c1', event)"  ></div>
+            <div class="white-key key" onmousedown="playNote('note-c1s', event)" ></div>
+            <div class="white-key key" onmousedown="playNote('note-c2', event)"  ></div>
+            <div class="black-key key" onmousedown="playNote('note-d1', event)"  ></div>
+            <div class="white-key key" onmousedown="playNote('note-d1s', event)" ></div>
+            <div class="black-key key" onmousedown="playNote('note-e1', event)"  ></div>
+            <div class="white-key key" onmousedown="playNote('note-f1', event)"  ></div>
+            <div class="black-key key" onmousedown="playNote('note-f1s', event)" ></div>
+            <div class="white-key key" onmousedown="playNote('note-g1', event)"  ></div>
+        </div>
+        <div class="bpm-display-label">BPM
+            <div class="bpm-display">21</div>
+        </div>
+        
+        <div class="info">
+            <h2>Chosen keys</h2>
+            <p>C4, D4, C#4 ...</p>
+        </div>
 
+        <div class="info">
+            <button>Play</button>
+            <button>Stop</button>
+            <button>Generate</button>
+            <div clear="both"></div>
+            <button>Button 1</button>
+            <div clear="both"></div>
+            <button>Button 2</button>
+        </div>
+
+        <div class="info instructions">
+            <h2>instructions</h2>
+            <p>Click on the piano to play</p>
+        </div>
+    </div>
+    <footer>
+        (c) 2018 Sergey and George
+    </footer>
 </body>
 </html>
