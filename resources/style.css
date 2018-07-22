@@ -18,6 +18,7 @@ button{
     border-radius: 20px;
     outline: none;
     margin: 3px;
+    cursor: pointer;
 }
 .main-container{
     position: relative;
@@ -107,4 +108,11 @@ footer{
     position: relative;
     margin-bottom: 20px;
     border-radius: 100%;
+}
+.disabled{
+    background-color: #999999;
+    cursor: initial;
+}
+.disabled:active{
+    background-color: #999999;
 }
