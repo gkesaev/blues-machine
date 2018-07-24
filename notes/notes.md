@@ -544,7 +544,7 @@ Dynamic strings are only available in newer browsers but there is a way to compi
 There is a range of built in math functions in JS for example, max, avg..
 
 There are 3 types of variables in JS:
-1. let - only for a curtain block
+1. let - only for a certain block
 2. var - global variable
 3. const - cant' be changed after initialization
 
@@ -559,8 +559,40 @@ console.log(grade * FACTOR); // 108
 
 FACTOR = 1.5; // TypeError: Assignment to constant variable.
 ```
+For loops:
+```
+let grades = [50, 60, 77];
+const FACTOR = 42;
 
+for (let grade of grades) {
+ console.log(grade * FACTOR);
+}
+
+for (let i = 0; i < grades.length; i++) {
+ console.log(grades[i] * FACTOR);
+}
+
+let i = 0;
+while(i < grades.length) {
+ console.log(grades[i] * FACTOR);
+ i++;
+}
+```
+Functions:
+```
+function factorize(list) {
+ const FACTOR = 42;
+ for (let value of list) {
+   console.log(value * FACTOR);
+ }
+}
+
+factorize([1, 2, 3]); // 42, 84, 126
+factorize([11, 22, 33]); // 462, 924, 1386
+```
 Arrays:
+
+as stack
 ```
 let grades = [50, 75, 83];
 
@@ -573,6 +605,7 @@ console.log(grades[3]); // 42
 grades.pop();
 console.log(grades.length); // 3
 ```
+dictionaries
 ```
 // Object-literal notation
 let studentGrade = { name: 'Einstein', grade: 50 };
