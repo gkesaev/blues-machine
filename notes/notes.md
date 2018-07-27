@@ -632,3 +632,226 @@ let gradesHash = {
 
 console.log(Object.keys(gradesHash)); // ['Einstein', 'Freud']
 ```
+## Pay attention not to confuse passing to function another function as parameter or a function call that should return another function.
+
+Event listenere code example:
+```
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Event Types</title>
+</head>
+
+<body>
+  <button>I'm a Button</button>
+  <input type="text">
+
+  <script>
+    let button = document.querySelector("button");
+
+    button.addEventListener("click", logEvent);
+    button.addEventListener("focus", logEvent);
+    button.addEventListener("blur", logEvent);
+    button.addEventListener("mousedown", logEvent);
+    button.addEventListener("mouseup", logEvent);
+    button.addEventListener("keypress", logEvent);
+
+    let input = document.querySelector("input");
+
+    input.addEventListener("click", logEvent);
+    input.addEventListener("focus", logEvent);
+    input.addEventListener("blur", logEvent);
+    input.addEventListener("mousedown", logEvent);
+    input.addEventListener("mouseup", logEvent);
+    input.addEventListener("keypress", logEvent);
+
+
+    function logEvent(e) {
+      console.log(`${e.type} just happened on ${e.target}`);
+    }
+
+  </script>
+</body>
+
+</html>
+```
+
+## USE `querySelector()` !!!
+```
+let button = document.querySelector('button');
+button.addEventListener('click', displayMessage);
+```
+Check the type of a variable, it is important since everything is dynamic
+```
+let value = '42';
+console.log(typeof value); // string
+
+let number = Number(value);
+console.log(typeof number); // number
+
+let studentGrade = { name: 'Einstein', grade: 50 };
+console.log(typeof studentGrade); // object
+
+```
+
+JS Types:
+- Number
+- String
+- Object
+- Function
+- Undefined
+
+```
+Number('moshe')          // NaN
+typeof NaN === 'number'  // true
+isNaN('moshe') === true  // true
+isNaN(42) === false      // true
+NaN === NaN              // false
+```
+
+Parse vaues in html table, make calculations and update with results. Example code:
+```
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Average</title>
+   <style>
+       body {
+           padding: 1em;
+       }
+
+       table {
+           border: 1px solid;
+           border-collapse: collapse;
+           margin-bottom: 1em;
+       }
+
+       th,
+       td {
+           border: 1px solid;
+           padding: 5px;
+       }
+   </style>
+</head>
+
+<body>
+   <table>
+       <thead>
+           <tr>
+               <th>Name</th>
+               <th>Grade</th>
+           </tr>
+       </thead>
+       <tbody>
+           <tr>
+               <td>Einstein</td>
+               <td>50</td>
+           </tr>
+           <tr>
+               <td>Freud</td>
+               <td>88</td>
+           </tr>
+           <tr>
+               <td>Edison</td>
+               <td>62</td>
+           </tr>
+           <tr>
+               <td>Newton</td>
+               <td>75</td>
+           </tr>
+           <tr>
+               <td>Darwin</td>
+               <td>94</td>
+           </tr>
+       </tbody>
+       <tfoot>
+           <tr>
+               <td>Average</td>
+               <td>?</td>
+           </tr>
+       </tfoot>
+   </table>
+   <button>Calc Average</button>
+
+   <script>
+       let button = document.querySelector('button');
+       button.addEventListener('click', () => {
+         let table = parseTable(document.querySelector('table'));
+         let grades = table.map(student => student.grade);
+         document.querySelector('tfoot td:last-child').textContent = avg(grades);
+       });
+
+       function parseTable(table) {
+           return Array.from(table.querySelectorAll('tbody tr')).map(row => ({
+             name: row.querySelector('td:first-child').textContent,
+             grade: Number(row.querySelector('td:last-child').textContent)
+           }));
+       }
+
+       let sum = arr => arr.reduce((sum, val) => sum + val, 0);
+       let avg = arr => sum(arr) / arr.length;
+   </script>
+</body>
+
+</html>
+```
+
+Double equal `==` checks only value and makes conversions if needed
+Triple equal `===` checks type and value.
+
+[Equality table](https://dorey.github.io/JavaScript-Equality-Table/)
+
+It is preferred to use explicit code, i.e. when comparing value that might need to be converted into another type it is better to use explicit type conversion and then triple equal check.
+
+[JavaScript.info](www.JavaScript.info)
+
+## [Document object model](https://docs.google.com/presentation/d/1QteFD0h7wOkdpMOu_XES_EsJXCpitTqGWfIMjSyIQFA/edit#slide=id.g388718f57c_0_620)
+
+Once any child element is clicked thant the event is updated all the way up through the tree.
+
+- [Eloquent JavaScript - Chapter 13 - DOM](http://eloquentjavascript.net/2nd_edition/13_dom.html)
+- [Eloquent JavaScript - Chapter 14 - Handling Events](http://eloquentjavascript.net/2nd_edition/14_event.html)
+- [Bubbling and Capturing](http://javascript.info/bubbling-and-capturing)
+
+we can catch even once for example for table and still know which element in the table was clicked.
+
+
+## [JS Timers](https://docs.google.com/presentation/d/1QteFD0h7wOkdpMOu_XES_EsJXCpitTqGWfIMjSyIQFA/edit#slide=id.g388718f57c_0_620)
+
+```
+let intervalId = setInterval(func, time in millisec)
+clearInterval(intervalId)
+timeoutId = setTimeout(func, time in millisec)
+clearTimeout(timeoutId)
+```
+[reference](http://javascript.info/settimeout-setinterval)
+
+Browser has only one thread, which is used for both UI and script. There is no context switching. This is why sometimes we receive error "script stuck".
+
+In page script should be as low in page as possible, best just before `</body>`
+
+Function Hoisting - functions are pulled up, therefore the order of functions does not matter.
+
+It is a good idea to put all the functions together in the bottom.
+
+It is a good idea to map functions to arrays instead of using for loops.
+
+It is a good idea instead of usig very tiny functions use anonymous functions and define them with `=>`.
+
+Example:
+```
+function get grades(table) {
+  return table.map((student) => student.grade);
+}
+```
+even better optimization:
+```
+let grades = table.map((student) => student.grade);
+```
+
