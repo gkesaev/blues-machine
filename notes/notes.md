@@ -1069,3 +1069,51 @@ npm install fs-extra
 Inline-style:
 ![routing summary](/notes/materials/summary-routing.png "Logo Title Text 1")
 
+More info on express rouing [https://expressjs.com/en/guide/routing.html](https://expressjs.com/en/guide/routing.html)
+
+### [Server Data Handling](https://docs.google.com/presentation/d/1Qe2EXLaSn9KCkr5LSRb1jIBo11Ef9ZmrnAM23IzciYs/edit#slide=id.p)
+
+## Lesson 8
+### [MongoDB](https://docs.google.com/presentation/d/1Qe2EXLaSn9KCkr5LSRb1jIBo11Ef9ZmrnAM23IzciYs/edit#slide=id.g32888548c7_0_2223)
+
+mongodb commands:
+- to start mongo shell: `mongo`
+- output the current db: `db`
+- list all databases: `show dbs`
+- create new db and switch to it: `use db_name`
+- create new collection and insert document to it: `db.ancestry.insert({name: 'Serge Krul'})`
+- insert many:
+```
+  db.ancestry.insertMany([
+    {name: 'Alex Krul'},
+    {name: 'Ella Krul'}
+  ])
+```
+- Query the collection: `db.ancestry.find({name: 'Serge Krul'})`
+
+install mongo nodejs client: `npm install mongodb`
+
+mongo example client nodejs:
+```
+let express = require('express');
+let app = express();
+let mongo = require('mongodb').MongoClient;
+
+app.listen(8000, () => {
+ console.log('listening on 8000...');
+
+ mongo.connect('mongodb://localhost:27017', (err, client) => {
+   console.log('Connected successfully to database');
+
+   let db = client.db('course');
+   let collection = db.collection('ancestry');
+   collection.insertMany([...], (err, result) => {
+     console.log(`Inserted ${result.result.n} records`);
+     collection.find({...}).toArray((err, result) => {
+       console.log(result);
+       client.close();
+     });
+   });
+ });
+});
+```

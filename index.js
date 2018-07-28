@@ -3,7 +3,7 @@ let express = require('express');
 let logRequest = require('log-request');
 
 let app = express();
-
+console.log(__dirname);
 app.use(express.static('client'));
 
 app.get('/api/moment', logRequest, (req, res) => {
