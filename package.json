@@ -1,0 +1,30 @@
+{
+  "name": "blues-machine",
+  "version": "1.0.0",
+  "description": "school project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeorgeKesaev/blues-machine.git"
+  },
+  "keywords": [
+    "blues",
+    "machine",
+    "midijs"
+  ],
+  "author": "Sergey and George",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GeorgeKesaev/blues-machine/issues"
+  },
+  "homepage": "https://github.com/GeorgeKesaev/blues-machine#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "fs-extra": "^7.0.0",
+    "log-request": "0.0.1",
+    "moment": "^2.22.2"
+  }
+}

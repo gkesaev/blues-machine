@@ -1,4 +1,4 @@
-Code samples are subject to copyright by Serge Krul, please get permission prior to any use or distribution.
+Code samples and screenshots are subject to copyright by Serge Krul, please get permission prior to any use or distribution.
 # Lesson 1
 [Course Overview](https://docs.google.com/presentation/d/1ECAbfpReLg_TPvc1CTlVv4Lk_TKhwGDRo8ZdzEalixA/edit)
 
@@ -935,4 +935,137 @@ promises and error handling [link](https://docs.google.com/presentation/d/1faOeq
 # Lesson 7
 ## NodeJS
 ### [Serve Side](https://docs.google.com/presentation/d/11Pdfbk8kt0BlL9EZRGgepGhgxORES8YgWmKvL_dWxo4/edit#slide=id.g2e1c3a3551_0_926)
+
+```
+let http = require('http');
+
+let server = http.createServer(onRequest);
+server.listen(8000);
+
+function onRequest(request, response) {
+ let responseTime = new Date();
+ response.end(`
+   Request ${request.url} served at ${responseTime.toLocaleString()}
+ `);
+}
+```
+
+### Modules
+Old way to import modules:
+```
+let foo = require('lib/foo');
+
+foo.doSomething();
+```
+New way:
+```
+import foo from './lib/foo';
+
+foo.doSomething();
+```
+New format will be available in both Node and browsers.
+
+### NPM
+NodeJS Package Manager
+
+list of npm packes with grades: [npms.io](https://npms.io/)
+
+To install a package with npm: `npm install moment`
+
+
+### How to debug node code:
+
+- in vscode debug icon on the left
+- in the top part open config, config json will be created
+- add config button in the bottom part
+- choose appropriate config (Node Attach in our case)
+- in order to allow for debugget to attach to running node process, node has to be ran in a curtain way: `node --inspect index.js`
+
+### Routing (API)
+
+```
+let moment = require('moment');
+let express = require('express');
+let logRequest = require('log-request');
+
+let app = express();
+
+app.use(express.static('client'));
+
+app.get('/api/moment', logRequest, (req, res) => {
+    handleMoment(req, res, req.query);
+});
+app.get('/the-answer', logRequest, (req, res) => {
+    res.send(String(42));
+});
+
+app.listen(8000);
+
+function onRequest(request, response) {
+    let urlObj = url.parse(request.url);
+
+    if (urlObj.pathname === '/api/moment') {
+        let params = qs.parse(urlObj.query);
+        handleMoment(request, response, params);
+        return;
+    }
+
+    getFile(urlObj.pathname)
+        .then(data => handleFile(request, response, data))
+        .catch(err => handleFileError(request, response, err))
+}
+function handleFile(request, response, data) {
+    response.end(data);
+}
+function handleFileError(request, response, err) {
+    if (err.code === 'ENOENT') {
+        sendStatus(request, response, 404);
+        return;
+    }
+    sendStatus(request, response, 500);
+}
+function handleMoment(request, response, params) {
+    response.end(`data`);
+}
+```
+
+To serve index.html page:
+Read file (is async, with callback)
+
+```
+let fs = require('fs');
+
+fs.readFile('./client/index.html', (err, data) => {
+ if (err) {
+   console.error(err);
+   return;
+ }
+ console.log(String(data));
+});
+```
+Turn callback-based code to Promise-based (util is a native module)
+
+```
+let util = require('util');
+
+function getFile(pathName) {
+ return util.promisify(fs.readFile)(`./client/${pathName}`);
+}
+```
+
+More File System Methods:
+- fs.stat(path, callback(err, stats)) - Get info about a file
+- fs.writeFile(path, data[, options], callback(err)) - Write a file
+- fs.unlink(path, callback(err)) - Delete a file
+- fs.readdir(path, callback(err, files)) - Read directory listing
+- fs.rmdir(path, callback(err)) - Delete a directory
+- More info here: http://devdocs.io/node/fs
+
+FS Extra - external package for more power
+npm install fs-extra
+[https://github.com/jprichardson/node-fs-extra](https://github.com/jprichardson/node-fs-extra)
+
+
+Inline-style:
+![routing summary](/notes/materials/summary-routing.png "Logo Title Text 1")
 
