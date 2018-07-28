@@ -1,4 +1,4 @@
-
+Code samples are subject to copyright by Serge Krul, please get permission prior to any use or distribution.
 # Lesson 1
 [Course Overview](https://docs.google.com/presentation/d/1ECAbfpReLg_TPvc1CTlVv4Lk_TKhwGDRo8ZdzEalixA/edit)
 
@@ -711,7 +711,7 @@ isNaN(42) === false      // true
 NaN === NaN              // false
 ```
 
-Parse vaues in html table, make calculations and update with results. Example code:
+Parse values in html table, make calculations and update with results. Example code:
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -825,9 +825,9 @@ we can catch even once for example for table and still know which element in the
 ## [JS Timers](https://docs.google.com/presentation/d/1QteFD0h7wOkdpMOu_XES_EsJXCpitTqGWfIMjSyIQFA/edit#slide=id.g388718f57c_0_620)
 
 ```
-let intervalId = setInterval(func, time in millisec)
+let intervalId = setInterval(func, time in milliseconds)
 clearInterval(intervalId)
-timeoutId = setTimeout(func, time in millisec)
+timeoutId = setTimeout(func, time in milliseconds)
 clearTimeout(timeoutId)
 ```
 [reference](http://javascript.info/settimeout-setinterval)
@@ -842,7 +842,7 @@ It is a good idea to put all the functions together in the bottom.
 
 It is a good idea to map functions to arrays instead of using for loops.
 
-It is a good idea instead of usig very tiny functions use anonymous functions and define them with `=>`.
+It is a good idea instead of using very tiny functions use anonymous functions and define them with `=>`.
 
 Example:
 ```
@@ -854,4 +854,85 @@ even better optimization:
 ```
 let grades = table.map((student) => student.grade);
 ```
+Another useful function on arrays in `foreach`.
+For example: `table.foreach(console.log);`
+
+
+Ajax request example:
+```
+let xhr = new XMLHttpRequest()
+xhr.open('GET', 'address');
+xhr.addEventListener('load');
+```
+The request is async so we need to add listener to know when it is finished.
+
+Generic request function:
+```
+function request(method, url) {
+ return new Promise((resolve, reject) => {
+   let xhr = new XMLHttpRequest();
+   xhr.open(method, url);
+   xhr.addEventListener('load', e => resolve(JSON.parse(e.target.responseText)));
+   xhr.addEventListener('error', reject);
+   xhr.send();
+ });
+```
+#### [Java Script Promise](https://docs.google.com/presentation/d/1faOeqikvbl2GSQuFyrWmcBa53jjtKzoiQ48MZdOogoc/edit#slide=id.p)
+It is a box that has async func.
+
+```
+let p = new Promise(function(resolve, reject) {
+  // Async stuff
+  let xhr
+  xhr.addEventListener(‘load’, resolve);
+  xhr.addEventListener(‘error’, reject);
+  // resolve(result) - when done
+  // reject(error) - if error
+});
+
+p.then(function(result) {
+  // Cool, it worked
+}).catch(function(error) {
+  // Oops, it didn't
+});
+```
+
+With the help of promise nested requests can be resolved this way:
+```
+// 1. call request
+// 2. create and return promise
+// 3. register then and catch callbacks
+// 4. empty stack => CPU idle
+// ...
+// 5. browser fetches next async task from queue and executes it in BG
+// ...
+// 6. HTTP response.
+// 7. xhr.addEventListener('load/error')
+// 8. call resolve/reject
+// 9. call then/catch handlers
+
+let p = request('GET', 'http://foo/ancestry.json');
+
+p.then(ancestry => {
+ console.log(getAverage(ancestry));
+}).catch(error => console.error);
+
+function request(method, url) {
+ return new Promise((resolve, reject) => {
+   let xhr = new XMLHttpRequest();
+   xhr.open(method, url);
+   xhr.addEventListener('load', e => resolve(JSON.parse(e.target.responseText)));
+   xhr.addEventListener('error', reject);
+   xhr.send();
+ });
+}
+```
+
+Thing to remember: I promise to handle the error (inside a Promise)!
+
+promises and error handling [link](https://docs.google.com/presentation/d/1faOeqikvbl2GSQuFyrWmcBa53jjtKzoiQ48MZdOogoc/edit#slide=id.p)
+
+# Lesson 7
+## NodeJS
+### [Serve Side](https://docs.google.com/presentation/d/11Pdfbk8kt0BlL9EZRGgepGhgxORES8YgWmKvL_dWxo4/edit#slide=id.g2e1c3a3551_0_926)
 
