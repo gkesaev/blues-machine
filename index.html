@@ -13,31 +13,24 @@
     </header>
     <div class="main-container">
         <div class="keyboard-сontainer">
-            <div class="white-key key note-C"  onmousedown="onNoteClick('C')"  ></div>
-            <div class="black-key key note-CS" onmousedown="onNoteClick('CS')" ></div>
-            <div class="white-key key note-D"  onmousedown="onNoteClick('D')"  ></div>
-            <div class="black-key key note-DS" onmousedown="onNoteClick('DS')"  ></div>
-            <div class="white-key key note-E"  onmousedown="onNoteClick('E')" ></div>
-            <div class="white-key key note-F"  onmousedown="onNoteClick('F')"  ></div>
-            <div class="black-key key note-FS" onmousedown="onNoteClick('FS')"  ></div>
-            <div class="white-key key note-G"  onmousedown="onNoteClick('G')" ></div>
-            <div class="black-key key note-GS" onmousedown="onNoteClick('GS')"  ></div>
-            <div class="white-key key note-A"  onmousedown="onNoteClick('A')"  ></div>
-            <div class="black-key key note-AS" onmousedown="onNoteClick('AS')" ></div>
-            <div class="white-key key note-B"  onmousedown="onNoteClick('B')"  ></div>
+            <div class="white-key key note-C"  onmousedown="onNoteClick(0)" ></div>
+            <div class="black-key key note-CS" onmousedown="onNoteClick(1)" ></div>
+            <div class="white-key key note-D"  onmousedown="onNoteClick(2)" ></div>
+            <div class="black-key key note-DS" onmousedown="onNoteClick(3)" ></div>
+            <div class="white-key key note-E"  onmousedown="onNoteClick(4)" ></div>
+            <div class="white-key key note-F"  onmousedown="onNoteClick(5)" ></div>
+            <div class="black-key key note-FS" onmousedown="onNoteClick(6)" ></div>
+            <div class="white-key key note-G"  onmousedown="onNoteClick(7)" ></div>
+            <div class="black-key key note-GS" onmousedown="onNoteClick(8)" ></div>
+            <div class="white-key key note-A"  onmousedown="onNoteClick(9)" ></div>
+            <div class="black-key key note-AS" onmousedown="onNoteClick(10)"></div>
+            <div class="white-key key note-B"  onmousedown="onNoteClick(11)"></div>
         </div>
         <div class="bpm-display-label">BPM
-            <div class="bpm-display">0</div>
+            <div class="bpm-display"><input type="text" class="bpm-value" placeholder="0"/></div>
         </div>
-        <div class="note--" onmousedown="onNoteClick('-')"> - pause - </div>
-        <div class="info">
-            <h2>Chosen keys</h2>
-            <p class="chosen-keys">Click on the piano to start playing</p>
-            <h2>Final Set</h2>
-            <p class="final-set-keys">Click on the piano to start playing</p>
-        </div>
-
-        <div class="info">
+        
+        <div class="info buttons">
             <button class="play-button">Play</button>
             <button class="stop-button">Stop</button>
             <button class="generate-button">Generate</button>
@@ -45,9 +38,18 @@
             <button class="reset-button">Reset</button>
             <div clear="both"></div>
             <button class="identity-button">Add Identity</button>
-            <div clear="both"></div>
-            <button class="reverse-button">Add Reversed</button>
+            <button class="retrograde-button">Add Retrograde</button>
+            <button class="transposition-button">Add Transposition</button>
+            <button class="pause-button"> Add Pause </button>
         </div>
+        <div class="info">
+            <h2>Chosen keys</h2>
+            <p class="chosen-keys">Click on the piano to start playing</p>
+            <h2>Final Set</h2>
+            <p class="final-set-keys">Click on the piano to start playing</p>
+        </div>
+
+        
 
         <div class="info instructions">
             <h2>instructions</h2>
