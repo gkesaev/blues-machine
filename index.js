@@ -106,11 +106,33 @@ app.get('/the-answer', logRequest, (req, res) => {
     res.send(String(42));
 });
 
-
 var server = app.listen(port, html_address, function () {
 
     let host = server.address().address
-    let port = server.address().port
+    let port = server.address().port;
+    const computerName = require('os').hostname();
+    console.log("name: " + computerName);
+    if (computerName !== "ip-172-31-34-177"){
+        console.log("BluesMachine app listening at http://%s:%s", host, port);
+    }
+    else {
+        const https = require('https');
+        https.get('https://api.ipify.org/', (resp) => {
+            let data = '';
 
-    console.log("BluesMachine app listening at http://%s:%s", host, port)
+            // A chunk of data has been recieved.
+            resp.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            // The whole response has been received. Print out the result.
+            resp.on('end', () => {
+                // console.log(JSON.parse(data).explanation);
+                console.log("BluesMachine app listening at http://%s:%s", data, port);
+            });
+
+        }).on("error", (err) => {
+            console.log("Error: " + err.message);
+        });
+    }
 })
