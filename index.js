@@ -54,7 +54,7 @@ app.get("/code_update", (req, res) => {
             }
         })
         .exec(() => console.log('pull done.'));
-    res.sendStatus(200);
+    res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 let port = 8001;
