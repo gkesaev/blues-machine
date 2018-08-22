@@ -60,6 +60,18 @@ app.get("/resources/style.css", (req, res) => {
     res.sendFile(path.join(__dirname + "/resources/style.css"));
 });
 
+app.post("/save_song", (req, res) => {
+    console.log(moment().format() + " requested to save song");
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({"song_id" : 123456789}));
+});
+
+app.get("/get_song", (req, res) => {
+    console.log(moment().format() + " requested to get song");
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify({ "song_id": 123456789, "notes" : ["A1", "G3"] }));
+});
+
 app.post("/code_update", (req, res) => {
     console.log(moment().format() + " update repo request from GitHub");
     require('simple-git')()
@@ -74,7 +86,7 @@ app.post("/code_update", (req, res) => {
             }
         })
         .exec(() => console.log(moment().format() + ' pull done.'));
-    // res.sendFile(path.join(__dirname + '/index.html'));
+    res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 app.get("/checkout", (req, res) => {
@@ -93,7 +105,7 @@ app.get("/checkout", (req, res) => {
             })
             .exec(() => console.log(moment().format() + ' Checkout done.'))
             .exec(() => res.redirect('/index.html'));
-        // res.sendFile(path.join(__dirname + '/index.html'));
+        res.sendFile(path.join(__dirname + '/index.html'));
     }
     else {
         res.sendStatus(400);
@@ -102,11 +114,18 @@ app.get("/checkout", (req, res) => {
 
 app.get('/api/moment', logRequest, (req, res) => {
     console.log(moment().format() + " test moment for fun");
-    handleMoment(req, res, req.query);
+    res.send(moment().format());
+    // handleMoment(req, res, req.query); //TODO: remove
 });
 
 app.get('/the-answer', logRequest, (req, res) => {
     res.send(String(42));
+});
+
+// instead of sending 400
+app.get('*', function (req, res) {
+    res.setHeader('Content-Type', 'text/html');
+    res.sendFile(path.join(__dirname, '42.html'));
 });
 
 var server = app.listen(port, html_address, function () {
