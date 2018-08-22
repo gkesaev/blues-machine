@@ -42,8 +42,18 @@ app.get("/resources/style.css", (req, res) => {
     res.sendFile(path.join(__dirname + "/resources/style.css"));
 });
 
+// const simpleGit = require('simple-git');
+// const remote_url = "https://github.com/GeorgeKesaev/blues-machine.git";
 app.get("/code_update", (req, res) => {
     console.log("new git push");
+    require('simple-git')()
+        .exec(() => console.log('Starting pull...'))
+        .pull((err, update) => {
+            if (update && update.summary.changes) {
+                require('child_process').exec('npm restart');
+            }
+        })
+        .exec(() => console.log('pull done.'));
 });
 
 let port = 8001;
