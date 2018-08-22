@@ -42,6 +42,10 @@ app.get("/resources/style.css", (req, res) => {
     res.sendFile(path.join(__dirname + "/resources/style.css"));
 })
 
+app.get("/code_update", (req, res) => {
+    console.log("new git push");
+})
+
 let port = 8000
 let address = '0.0.0.0'
 app.listen(port, address, () => {
