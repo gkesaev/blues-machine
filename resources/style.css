@@ -23,6 +23,18 @@ button{
     font-weight: bold;
     box-shadow: 0 3px #999999;
 }
+input[name="transposition"]{
+    height: 30px;
+    width: 50px;
+    border-radius: 3px;
+    text-align: center;
+    box-shadow: 0 3px #999999;
+    font-size: 20px;
+    vertical-align: middle;
+}
+label{
+    font-weight: bold;
+}
 button:hover{
     color: grey;
     opacity: 0.8;
@@ -33,7 +45,7 @@ button:active{
     opacity: 0.5;
 }
 button.play-button{
-    background-color: #6FC5DD;
+    background-color: #c0d857;
 }
 button.stop-button{
     background-color: #FF656C;
@@ -43,6 +55,12 @@ button.generate-button{
 }
 button.reset-button{
     background-color: #D1C4E8;
+}
+button.transposition-button{
+    background-color: #d2e8df;
+}
+button.identity-button, button.retrograde-button, button.pause-button{
+    background-color: #6FC5DD;
 }
 .main-container{
     position: relative;
