@@ -59,7 +59,7 @@ const mongo_url = 'mongodb://' + credentials.user + ':' +
     credentials.db
 
 app.listen(port, () => {
-    console.log('listening on {port}...');
+    console.log('listening on ' + port + '...');
 
     mongo.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
             console.log('Connected successfully to database');
