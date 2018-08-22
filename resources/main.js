@@ -1,3 +1,13 @@
+// if (window.location.hostname === "127.0.0.1"){
+if (window.location.hostname === "georgekesaev.github.io") {
+    window.location.href = "http://52.215.130.247:8001/";
+}
+
+window.onload = function () {
+    let host = window.location.hostname;
+    console.log(host);
+};
+
 var context = new AudioContext();
 var duration = 1;
 var interval = 2;
@@ -29,14 +39,14 @@ class Note{
     set isActive(isActive){ this._isActive = isActive;}
     get isActive(){ return this._isActive;}
 
-    enable(){ 
+    enable(){
         this._isActive = true;
         let el = document.querySelector('.note-' + this._name);
         if (el){
             el.classList.remove('disabled');
         }
     }
-    disable(){ 
+    disable(){
         this._isActive = false;
         let el = document.querySelector('.note-' + this._name);
         if (el){
