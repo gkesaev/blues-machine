@@ -60,7 +60,7 @@ app.get("/resources/style.css", (req, res) => {
     res.sendFile(path.join(__dirname + "/resources/style.css"));
 });
 
-app.get("/code_update", (req, res) => {
+app.post("/code_update", (req, res) => {
     console.log(moment().format() + " update repo request from GitHub");
     require('simple-git')()
         .exec(() => console.log(moment().format() + 'Checking out ...'))
@@ -69,9 +69,12 @@ app.get("/code_update", (req, res) => {
                 // console.log(moment().format() + "restarting")
                 // require('child_process').exec('npm restart');
             }
+            if (err) {
+                console.error(err);
+            }
         })
-        .exec(() => console.log(moment().format() + 'pull done.'));
-    res.sendFile(path.join(__dirname + '/index.html'));
+        .exec(() => console.log(moment().format() + ' pull done.'));
+    // res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 app.get("/checkout", (req, res) => {
