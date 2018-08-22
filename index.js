@@ -1,34 +1,56 @@
-// let moment = require('moment');
-let express = require('express');
+console.log("running in: " + __dirname);
+
+let moment = require('moment');
 let logRequest = require('log-request');
-// let mongo = require('mongodb');
-let path = require("path");
+let express = require('express');
 let app = express();        // https://expressjs.com/en/guide/routing.html
-
-// var MongoClient = require('mongodb').MongoClient;
-// var url = "mongodb://54.171.85.189:27017/blues-notes";
-
-// MongoClient.connect(url, function (err, db) {
-//     if (err) throw err;
-//     console.log("Database created!");
-//     db.close();
-// });
-
-console.log(__dirname);
 app.use(express.static('client'));
 
-app.get('/api/moment', logRequest, (req, res) => {
-    handleMoment(req, res, req.query);
+let port = 8001;
+let html_address = '0.0.0.0';
+let mongo = require('mongodb').MongoClient;
+const credentials = require('./credentials.json');
+const mongo_url = 'mongodb://' + credentials.user + ':' +
+                                credentials.password + '@' +
+                                credentials.db_server + ':' +
+                                credentials.port + '/' +
+                                credentials.db
+
+app.listen(port, html_address, () => {
+    console.log('listening on ' + port + '...');
 });
-app.get('/the-answer', logRequest, (req, res) => {
-    res.send(String(42));
+
+app.get("/count", (req, res) => {
+    console.log(moment().format() + " counting songs");
+    collection.count({ name: "gosha" });
+
+    mongo.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
+        console.log('Connected successfully to database');
+
+        let db = client.db(credentials.db);
+        let collection = db.collection(credentials.collection);
+        collection.insertMany([{ name: "kkkk" }, { name: "param" }], (err, result) => {
+            console.log(`Inserted ${result.result.n} records`);
+            // collection.find({ name: "gosha" }).toArray((err, result) => {
+            collection.count({ name: "gosha" }).toArray((err, result) => {
+                console.log(result);
+                res.send(String(result));
+                client.close();
+            });
+
+        });
+    });
 });
+
+let path = require("path");
+
 app.get("/", (req, res) => {
-    console.log("serve index");
+    console.log(moment().format() + " serve index");
     res.sendFile(path.join(__dirname + '/index.html'));
 });
+
 app.get("/index.html", (req, res) => {
-    console.log("serve index");
+    console.log(moment().format() + " serve index");
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
@@ -42,63 +64,25 @@ app.get("/resources/style.css", (req, res) => {
     res.sendFile(path.join(__dirname + "/resources/style.css"));
 });
 
-// const simpleGit = require('simple-git');
-// const remote_url = "https://github.com/GeorgeKesaev/blues-machine.git";
 app.get("/code_update", (req, res) => {
-    console.log("new git push");
+    console.log(moment().format() + " update repo request from GitHub");
     require('simple-git')()
-        .exec(() => console.log('Starting pull...'))
+        .exec(() => console.log(moment().format() + 'Starting pull...'))
         .pull((err, update) => {
             if (update && update.summary.changes) {
-                require('child_process').exec('npm restart');
+                // console.log(moment().format() + "restarting")
+                // require('child_process').exec('npm restart');
             }
         })
-        .exec(() => console.log('pull done.'));
+        .exec(() => console.log(moment().format() + 'pull done.'));
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-let port = 8001;
-let address = '0.0.0.0';
-const creds = require("./credentials");
-let mongo = require('mongodb').MongoClient;
-
-const credentials = require('./credentials.json');
-const mongo_url = 'mongodb://' + credentials.user + ':' +
-    credentials.password + '@' +
-    credentials.server + ':' +
-    credentials.port + '/' +
-    credentials.db
-
-app.listen(port, address, () => {
-    console.log('listening on ' + port + '...');
-
-    mongo.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
-            console.log('Connected successfully to database');
-
-            let db = client.db('blues-notes');
-            let collection = db.collection('notes');
-            collection.insertMany([{ name: "kkkk" }, { name: "param" }], (err, result) => {
-                console.log(`Inserted ${result.result.n} records`);
-                collection.find({ name: "gosha" }).toArray((err, result) => {
-                    console.log(result);
-                    client.close();
-                });
-            });
-        });
+app.get('/api/moment', logRequest, (req, res) => {
+    console.log(moment().format() + " test moment for fun");
+    handleMoment(req, res, req.query);
 });
 
-function handleFile(request, response, data) {
-    response.end(data);
-}
-
-function handleFileError(request, response, err) {
-    if (err.code === 'ENOENT') {
-        sendStatus(request, response, 404);
-        return;
-    }
-    sendStatus(request, response, 500);
-}
-
-function handleMoment(request, response, params) {
-    response.end('data');
-}
+app.get('/the-answer', logRequest, (req, res) => {
+    res.send(String(42));
+});
