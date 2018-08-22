@@ -16,10 +16,6 @@ const mongo_url = 'mongodb://' + credentials.user + ':' +
                                 credentials.port + '/' +
                                 credentials.db
 
-app.listen(port, html_address, () => {
-    console.log('listening on ' + port + '...');
-});
-
 app.get("/count", (req, res) => {
     console.log(moment().format() + " counting songs");
     collection.count({ name: "gosha" });
@@ -67,7 +63,7 @@ app.get("/resources/style.css", (req, res) => {
 app.get("/code_update", (req, res) => {
     console.log(moment().format() + " update repo request from GitHub");
     require('simple-git')()
-        .exec(() => console.log(moment().format() + 'Starting pull...'))
+        .exec(() => console.log(moment().format() + 'Checking out ...'))
         .pull((err, update) => {
             if (update && update.summary.changes) {
                 // console.log(moment().format() + "restarting")
@@ -78,6 +74,29 @@ app.get("/code_update", (req, res) => {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+app.get("/checkout", (req, res) => {
+    // let branch = req.params.branch;
+    let branch = req.query.branch;
+    console.log(moment().format() + " requested branch: " + branch);
+    if (branch === 'george' || branch === 'sergey' || branch === 'master'){
+        console.log(moment().format() + " checkout " + branch + " branch");
+        require('simple-git')()
+            .exec(() => console.log(moment().format() + ' Checking out ...'))
+            .checkout('george', (err, update) => {
+                if (update && update.summary.changes) {
+                    // console.log(moment().format() + "restarting")
+                    // require('child_process').exec('npm restart');
+                }
+            })
+            .exec(() => console.log(moment().format() + ' Checkout done.'))
+            .exec(() => res.redirect('/index.html'));
+        // res.sendFile(path.join(__dirname + '/index.html'));
+    }
+    else {
+        res.sendStatus(400);
+    }
+});
+
 app.get('/api/moment', logRequest, (req, res) => {
     console.log(moment().format() + " test moment for fun");
     handleMoment(req, res, req.query);
@@ -86,3 +105,12 @@ app.get('/api/moment', logRequest, (req, res) => {
 app.get('/the-answer', logRequest, (req, res) => {
     res.send(String(42));
 });
+
+
+var server = app.listen(port, html_address, function () {
+
+    let host = server.address().address
+    let port = server.address().port
+
+    console.log("BluesMachine app listening at http://%s:%s", host, port)
+})
