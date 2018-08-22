@@ -1074,7 +1074,8 @@ More info on express rouing [https://expressjs.com/en/guide/routing.html](https:
 ### [Server Data Handling](https://docs.google.com/presentation/d/1Qe2EXLaSn9KCkr5LSRb1jIBo11Ef9ZmrnAM23IzciYs/edit#slide=id.p)
 
 ## Lesson 8
-### [MongoDB](https://docs.google.com/presentation/d/1Qe2EXLaSn9KCkr5LSRb1jIBo11Ef9ZmrnAM23IzciYs/edit#slide=id.g32888548c7_0_2223)
+### [MongoDB]
+(https://docs.google.com/presentation/d/1Qe2EXLaSn9KCkr5LSRb1jIBo11Ef9ZmrnAM23IzciYs/edit#slide=id.g32888548c7_0_2223)
 
 mongodb commands:
 - to start mongo shell: `mongo`
@@ -1116,4 +1117,24 @@ app.listen(8000, () => {
    });
  });
 });
+
 ```
+### [Unit Testing Intro](https://docs.google.com/presentation/d/16iTKG0otluFgVRWyqTF15qzIgGIrUyG93ZlSc69kp8c/edit#slide=id.p)
+install jasmin:
+```
+$ npm install --save-dev jasmine
+$ npm i -D jasmine
+```
+install [karma](http://karma-runner.github.io/2.0/intro/installation.html):
+```
+# Install Karma:
+$ npm install karma --save-dev
+
+# Install plugins that your project needs:
+$ npm install karma-jasmine karma-chrome-launcher jasmine-core --save-dev
+```
+init karma `karma init karma.conf.js`
+```
+$ npm install -g karma-cli
+```
+

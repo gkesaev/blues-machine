@@ -1,10 +1,19 @@
 let moment = require('moment');
 let express = require('express');
 let logRequest = require('log-request');
-
+let mongo = require('mongodb');
 let path = require("path");
+let app = express();        // https://expressjs.com/en/guide/routing.html
 
-let app = express();
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://54.171.85.189:27017/blues-notes";
+
+MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    console.log("Database created!");
+    db.close();
+});
+
 console.log(__dirname);
 app.use(express.static('client'));
 
@@ -15,10 +24,12 @@ app.get('/the-answer', logRequest, (req, res) => {
     res.send(String(42));
 });
 app.get("/", (req, res) => {
-    console.log("huynayaaaaaaaa");
+    console.log("serve index");
+    res.sendFile(path.join('{__dirname}/index.html'));
+})
+app.get("/index.html", (req, res) => {
+    console.log("serve index");
     res.sendFile(path.join(__dirname + '/index.html'));
-    res.sendFile(path.join(__dirname + '/resources/style.css'));
-    // res.sendFile(path.join(__dirname + '/resources/main.js'));
 })
 
 app.get("/resources/main.js", (req, res) => {
@@ -37,24 +48,6 @@ app.listen(port, address, () => {
     console.log("server listening on: http://" + address + ":" + port)
 });
 
-// function onRequest(request, response) {
-//     console.log("handling request");
-//     let urlObj = url.parse(request.url);
-
-//     if (urlObj.pathname === '/api/moment') {
-//         let params = qs.parse(urlObj.query);
-//         handleMoment(request, response, params);
-//         return;
-//     }
-
-//     // if (urlObj.pathname === '/') {
-//     //     console.log(urlObj.pathname);
-//     //     urlObj.pathname = 'index.html'
-//     // }
-//     getFile(urlObj.pathname)
-//         .then(data => handleFile(request, response, data))
-//         .catch(err => handleFileError(request, response, err))
-// }
 function handleFile(request, response, data) {
     response.end(data);
 }
