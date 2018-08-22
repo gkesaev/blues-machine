@@ -3,3 +3,6 @@ debug.log
 node_modules
 resources/backup
 credentials.json
+package-lock.json
+package.json
+
