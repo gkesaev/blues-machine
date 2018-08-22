@@ -74,7 +74,7 @@ app.post("/code_update", (req, res) => {
             }
         })
         .exec(() => console.log(moment().format() + ' pull done.'));
-    // res.sendFile(path.join(__dirname + '/index.html'));
+    res.sendFile(path.join(__dirname + '/index.html'));
 });
 
 app.get("/checkout", (req, res) => {
