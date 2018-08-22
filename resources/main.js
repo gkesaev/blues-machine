@@ -9,7 +9,7 @@ if (window.location.hostname === "georgekesaev.github.io"){
 
 window.onload = function () {
     let host = window.location.hostname;
-    console.log(window.location.hostname);
+    console.log(host);
 };
 
 class Melody{
