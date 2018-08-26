@@ -16,6 +16,24 @@ const mongo_url = 'mongodb://' + credentials.user + ':' +
                                 credentials.port + '/' +
                                 credentials.db
 
+var MongoClient = require('mongodb').MongoClient;
+
+var uri = "mongodb+srv://heroku:mZHwihKiq1oc16Qv@bluesmachine-nyn8p.gcp.mongodb.net/blues-notes";// + "?retryWrites=true";
+MongoClient.connect(uri, function (err, client) {
+    const collection = client.db("blues-notes").collection("notes");
+    // perform actions on the collection object
+    collection.insertMany([{ name: "gosha", age: 32 }, { name: "gosha", age: 18 }], (err, result) => {
+        console.log(`Inserted ${result.result.n} records`);
+        // collection.find({ name: "gosha" }).toArray((err, result) => {
+        result = collection.estimatedDocumentCount({ name: "gosha" });//.toArray((err, result) => {
+            console.log(result);
+            // res.send(String(result));
+            client.close();
+        // });
+    });
+    client.close();
+});
+
 app.get("/count", (req, res) => {
     console.log(moment().format() + " counting songs");
     collection.count({ name: "gosha" });
@@ -102,13 +120,13 @@ app.get("/checkout", (req, res) => {
                     // console.log(moment().format() + "restarting")
                     // require('child_process').exec('npm restart');
                 }
+                if (err) {
+                    console.error(err);
+                }
             })
             .exec(() => console.log(moment().format() + ' Checkout done.'))
             .exec(() => res.redirect('/index.html'));
         res.sendFile(path.join(__dirname + '/index.html'));
-    }
-    else {
-        res.sendStatus(400);
     }
 });
 
