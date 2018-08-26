@@ -6,8 +6,8 @@ let express = require('express');
 let app = express();        // https://expressjs.com/en/guide/routing.html
 app.use(express.static('client'));
 
-let port = 8001;
-let html_address = '0.0.0.0';
+let port = process.env.PORT || 8000;;
+let html_address = '';
 let mongo = require('mongodb').MongoClient;
 const credentials = require('./credentials.json');
 const mongo_url = 'mongodb://' + credentials.user + ':' +
