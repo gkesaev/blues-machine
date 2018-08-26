@@ -1,5 +1,15 @@
-# blues-machine
+# Blues-Machine
 
-Current [address](http://54.171.85.189/):
+Blues machine is an experiment if fusing together [dodecaphonic](https://en.wikipedia.org/wiki/Twelve-tone_technique) (twelve note) technique with blues rules.
 
-# [http://52.215.130.247:8001/](http://52.215.130.247:8001/)
+The final project should be able to let the user pick the initial order of 12 notes and then according to users choice extend the notes array by appending modifications on initial array according to a set of preconfigured rules such as:
+- [retrograde](https://en.wikipedia.org/wiki/Retrograde_inversion)
+- [transposition](https://en.wikipedia.org/wiki/Transposition_(music))
+
+Then after pressing "Generate" button algorithm should apply blues rules to generated notes.
+And finally with play button user will be able to listen to the results.
+
+Every such song may be saved and also loaded with provided song id.
+
+Check out the website:
+## [Blues Machine](https://georgekesaev.github.io/blues-machine/)
