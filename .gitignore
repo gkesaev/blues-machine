@@ -5,4 +5,3 @@ resources/backup
 credentials.json
 package-lock.json
 package.json
-Procfile.txt
