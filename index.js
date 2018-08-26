@@ -23,7 +23,7 @@ let app = express();
 // let server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
-let port = process.env.PORT || 8000;;
+// let port = process.env.PORT || 8000;;
 let html_address = '';
 let mongo = require('mongodb').MongoClient;
 
