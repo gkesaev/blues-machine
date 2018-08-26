@@ -1,10 +1,27 @@
 console.log("running in: " + __dirname);
 
+
+const path = require('path');
+const PORT = process.env.PORT || 8000;
+
+
 let moment = require('moment');
 let logRequest = require('log-request');
 let express = require('express');
-let app = express();        // https://expressjs.com/en/guide/routing.html
-app.use(express.static('client'));
+// let app = express();        // https://expressjs.com/en/guide/routing.html
+// app.use(express.static('client'));
+let app = express();
+
+// app.use(express.static(
+    // path.join(__dirname, 'public')))
+    // .set('views', path.join(__dirname, 'views'))
+    // .engine('html', require('ejs').renderFile)
+    // .set('view engine', 'html')
+    // .get('/', (req, res) => res.render('pages/index'))
+    // .get('/cool', (req, res) => res.send(cool()))
+
+// let server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
 
 let port = 8001;
 let html_address = '0.0.0.0';
@@ -37,12 +54,12 @@ MongoClient.connect(uri, { useNewUrlParser: true }, function (err, client) {
     const collection = client.db("blues-notes").collection("notes");
     // perform actions on the collection object
     collection.insertMany([{ name: "gosha", age: 32 }, { name: "gosha", age: 18 }], (err, result) => {
-        console.log(`Inserted ${result.result.n} records`);
+        // console.log(`Inserted ${result.result.n} records`);
         // collection.find({ name: "gosha" }).toArray((err, result) => {
-        result = collection.estimatedDocumentCount({ name: "gosha" });//.toArray((err, result) => {
-            console.log(result);
+        // result = collection.estimatedDocumentCount({ name: "gosha" });//.toArray((err, result) => {
+            // console.log(result);
             // res.send(String(result));
-            client.close();
+            // client.close();
         // });
     });
     client.close();
@@ -70,7 +87,7 @@ app.get("/count", (req, res) => {
     });
 });
 
-let path = require("path");
+// let path = require("path");
 
 app.get("/", (req, res) => {
     console.log(moment().format() + " serve index");
@@ -160,7 +177,9 @@ app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, '42.html'));
 });
 
-var server = app.listen(port, html_address, function () {
+// var server = app.listen(port, html_address, function () {
+
+var server = app.listen(PORT, "", function () {
 
     let host = server.address().address
     let port = server.address().port;
