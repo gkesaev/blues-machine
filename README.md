@@ -12,4 +12,4 @@ And finally with play button user will be able to listen to the results.
 Every such song may be saved and also loaded with provided song id.
 
 Check out the website:
-## [Blues Machine](https://georgekesaev.github.io/blues-machine/)
+## [Blues Machine](https://blues-machine.herokuapp.com/)
