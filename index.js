@@ -9,17 +9,31 @@ app.use(express.static('client'));
 let port = 8001;
 let html_address = '0.0.0.0';
 let mongo = require('mongodb').MongoClient;
-const credentials = require('./credentials.json');
-const mongo_url = 'mongodb://' + credentials.user + ':' +
-                                credentials.password + '@' +
-                                credentials.db_server + ':' +
-                                credentials.port + '/' +
-                                credentials.db
 
+let fs = require('fs');
+if (fs.existsSync('./credentials.json')){
+    // const f = require('./credentials.json');
+    var credentials = JSON.parse(fs.readFileSync('./credentials.json', 'utf8'));
+}
+else {
+    var credentials = process.env;
+}
+// const mongo_url = 'mongodb://' + credentials.mongoUser + ':' +
+//     credentials.mongoPass + '@' +
+//                                 credentials.db_server + ':' +
+//                                 credentials.port + '/' +
+//                                 credentials.db
+
+const uri = 'mongodb+srv://' + credentials.mongoUser + ':' +
+    credentials.mongoPass + '@' +
+    credentials.mongoServer + '/' +
+    // credentials.port + '/' +
+    credentials.mongoDB;
+console.log(uri);
 var MongoClient = require('mongodb').MongoClient;
 
-var uri = "mongodb+srv://heroku:mZHwihKiq1oc16Qv@bluesmachine-nyn8p.gcp.mongodb.net/blues-notes";// + "?retryWrites=true";
-MongoClient.connect(uri, function (err, client) {
+// var uri = "mongodb+srv://heroku:KgfrWRrVi4puRjgc@bluesmachine-nyn8p.gcp.mongodb.net/blues-notes";// + "?retryWrites=true";
+MongoClient.connect(uri, { useNewUrlParser: true }, function (err, client) {
     const collection = client.db("blues-notes").collection("notes");
     // perform actions on the collection object
     collection.insertMany([{ name: "gosha", age: 32 }, { name: "gosha", age: 18 }], (err, result) => {
