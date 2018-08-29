@@ -1,20 +1,69 @@
 console.log("running in: " + __dirname);
 
+
+const path = require('path');
+const PORT = process.env.PORT || 8000;
+
+
 let moment = require('moment');
 let logRequest = require('log-request');
 let express = require('express');
-let app = express();        // https://expressjs.com/en/guide/routing.html
-app.use(express.static('client'));
+// let app = express();        // https://expressjs.com/en/guide/routing.html
+// app.use(express.static('client'));
+let app = express();
 
-let port = 8001;
-let html_address = '0.0.0.0';
+// app.use(express.static(
+    // path.join(__dirname, 'public')))
+    // .set('views', path.join(__dirname, 'views'))
+    // .engine('html', require('ejs').renderFile)
+    // .set('view engine', 'html')
+    // .get('/', (req, res) => res.render('pages/index'))
+    // .get('/cool', (req, res) => res.send(cool()))
+
+// let server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+
+// let port = process.env.PORT || 8000;;
+let html_address = '';
 let mongo = require('mongodb').MongoClient;
-const credentials = require('./credentials.json');
-const mongo_url = 'mongodb://' + credentials.user + ':' +
-                                credentials.password + '@' +
-                                credentials.db_server + ':' +
-                                credentials.port + '/' +
-                                credentials.db
+
+let fs = require('fs');
+if (fs.existsSync('./credentials.json')){
+    // const f = require('./credentials.json');
+    var credentials = JSON.parse(fs.readFileSync('./credentials.json', 'utf8'));
+}
+else {
+    var credentials = process.env;
+}
+// const mongo_url = 'mongodb://' + credentials.mongoUser + ':' +
+//     credentials.mongoPass + '@' +
+//                                 credentials.db_server + ':' +
+//                                 credentials.port + '/' +
+//                                 credentials.db
+
+const uri = 'mongodb+srv://' + credentials.mongoUser + ':' +
+    credentials.mongoPass + '@' +
+    credentials.mongoServer + '/' +
+    // credentials.port + '/' +
+    credentials.mongoDB;
+console.log(uri);
+var MongoClient = require('mongodb').MongoClient;
+
+// var uri = "mongodb+srv://heroku:KgfrWRrVi4puRjgc@bluesmachine-nyn8p.gcp.mongodb.net/blues-notes";// + "?retryWrites=true";
+MongoClient.connect(uri, { useNewUrlParser: true }, function (err, client) {
+    const collection = client.db("blues-notes").collection("notes");
+    // perform actions on the collection object
+    collection.insertMany([{ name: "gosha", age: 32 }, { name: "gosha", age: 18 }], (err, result) => {
+        // console.log(`Inserted ${result.result.n} records`);
+        // collection.find({ name: "gosha" }).toArray((err, result) => {
+        // result = collection.estimatedDocumentCount({ name: "gosha" });//.toArray((err, result) => {
+            // console.log(result);
+            // res.send(String(result));
+            // client.close();
+        // });
+    });
+    client.close();
+});
 
 app.get("/count", (req, res) => {
     console.log(moment().format() + " counting songs");
@@ -38,7 +87,7 @@ app.get("/count", (req, res) => {
     });
 });
 
-let path = require("path");
+// let path = require("path");
 
 app.get("/", (req, res) => {
     console.log(moment().format() + " serve index");
@@ -102,13 +151,13 @@ app.get("/checkout", (req, res) => {
                     // console.log(moment().format() + "restarting")
                     // require('child_process').exec('npm restart');
                 }
+                if (err) {
+                    console.error(err);
+                }
             })
             .exec(() => console.log(moment().format() + ' Checkout done.'))
             .exec(() => res.redirect('/index.html'));
         res.sendFile(path.join(__dirname + '/index.html'));
-    }
-    else {
-        res.sendStatus(400);
     }
 });
 
@@ -128,7 +177,9 @@ app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, '42.html'));
 });
 
-var server = app.listen(port, html_address, function () {
+// var server = app.listen(port, html_address, function () {
+
+var server = app.listen(PORT, "", function () {
 
     let host = server.address().address
     let port = server.address().port;
