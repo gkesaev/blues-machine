@@ -1,9 +1,5 @@
-var context = new AudioContext();
-var duration = 1;
-var interval = 2;
-
 // if (window.location.hostname === "127.0.0.1"){
-if (window.location.hostname === "georgekesaev.github.io"){
+if (window.location.hostname === "georgekesaev.github.io") {
     window.location.href = "http://52.215.130.247:8001/";
 }
 
@@ -12,6 +8,9 @@ window.onload = function () {
     console.log(host);
 };
 
+var context = new AudioContext();
+var duration = 1;
+var interval = 2;
 class Melody{
     constructor(setOfNotes, bpm){
         this._setOfNotes = setOfNotes;
@@ -75,14 +74,14 @@ var notes = {
 var initialSet = new Set();
 var buffer = [];
 
-document.querySelector('.play-button').addEventListener("click", () => startPlay());
-document.querySelector('.stop-button').addEventListener("click", () => stopPlay());
-document.querySelector('.generate-button').addEventListener("mouseup", () => generate());
-document.querySelector('.reset-button').addEventListener("click", () => reset());
-document.querySelector('.identity-button').addEventListener("click", () => addIdentity());
-document.querySelector('.retrograde-button').addEventListener("click", () => addRetrograde());
-document.querySelector('.transposition-button').addEventListener("click", () => addTransposition(4));
-document.querySelector('.pause-button').addEventListener("click", () => addPause());
+document.querySelector('.play-button').addEventListener("click", startPlay);
+document.querySelector('.stop-button').addEventListener("click", stopPlay);
+document.querySelector('.generate-button').addEventListener("mouseup", generate);
+document.querySelector('.reset-button').addEventListener("click", reset);
+document.querySelector('.identity-button').addEventListener("click", addIdentity);
+document.querySelector('.retrograde-button').addEventListener("click", addRetrograde);
+document.querySelector('.transposition-button').addEventListener("click", addTransposition);
+document.querySelector('.pause-button').addEventListener("click", addPause);
 document.querySelector('.bpm-value').addEventListener("change", () => transposition(3));
 
 function play(frequency, duration, time) {
@@ -178,8 +177,9 @@ function stopPlay(){
     // context.close();
 }
 
-function addTransposition(byHowMuch){
+function addTransposition(){
     let tempBuff = [];
+    let byHowMuch = document.querySelector('input[name="transposition"]').value;
     initialSet.forEach(note => {
         let newNoteId = (note._noteId + byHowMuch) % 12;
         tempBuff.push(notes[newNoteId]);
