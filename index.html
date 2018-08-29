@@ -29,38 +29,41 @@
         <div class="bpm-display-label">BPM
             <div class="bpm-display"><input type="text" class="bpm-value" placeholder="0"/></div>
         </div>
-        
-        <div class="info buttons">
-            <button class="play-button">Play</button>
-            <button class="stop-button">Stop</button>
-            <button class="generate-button">Generate</button>
-            <div clear="both"></div>
-            <button class="reset-button">Reset</button>
-            <div clear="both"></div>
-            <button class="identity-button">Add Identity</button>
-            <button class="retrograde-button">Add Retrograde</button>
-            <button class="pause-button"> Add Pause </button>
-            <div clear="both"></div>
-            <label for="transposition">Transposition: </label><input name="transposition" type="number" />
-            <button class="transposition-button">Add Transposition</button>
+        <div class="info">
+            <div class="info buttons">
+                <button class="identity-button">Add Identity</button>
+                <button class="retrograde-button">Add Retrograde</button>
+                <button class="pause-button"> Add Pause </button>
+                <div clear="both"></div>
+                <label for="transposition">Transposition: </label><input name="transposition" type="number" />
+                <button class="transposition-button">Add</button>
+                <div clear="both"></div>
+                <!-- <button class="generate-button">Generate</button> -->
+                <div clear="both"></div>
+                <button class="play-button">Play</button>
+                <button class="reset-button">Reset</button>
+            </div>
         </div>
         <div class="info">
             <h2>Chosen keys</h2>
             <p class="chosen-keys">Click on the piano to start playing</p>
             <h2>Final Set</h2>
             <p class="final-set-keys">Click on the piano to start playing</p>
+                <div class="info buttons">
+                <button class="save-button">Save</button>
+                <button class="load-button">Load</button>
+            </div>
         </div>
-
-        
-
         <div class="info instructions">
             <h2>instructions</h2>
             <p>Click on the piano to play</p>
         </div>
+        
     </div>
     <footer>
         (c) 2018 Sergey and George
     </footer>
+    <div class="mask">Listen to the music...</div>
 </body>
 <script src="resources/main.js"></script>
 </html>

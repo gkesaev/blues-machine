@@ -12,6 +12,9 @@ header{
     background-color: #273045;
     color: aliceblue;
 }
+h2{
+    margin: 0;
+}
 button{
     height: 35px;
     min-width: 120px;
@@ -25,10 +28,16 @@ button{
 }
 input[name="transposition"]{
     height: 30px;
+    line-height: 30px;
     width: 50px;
-    border-radius: 3px;
+    border-radius: 8px;
     text-align: center;
-    box-shadow: 0 3px #999999;
+    /* box-shadow: 0 3px #999999; */
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1px solid firebrick;
+    border-top: 1px solid firebrick;
+    outline: 0;
     font-size: 20px;
     vertical-align: middle;
 }
@@ -47,19 +56,13 @@ button:active{
 button.play-button{
     background-color: #c0d857;
 }
-button.stop-button{
-    background-color: #FF656C;
-}
 button.generate-button{
     background-color: #E8AC51;
 }
 button.reset-button{
-    background-color: #D1C4E8;
+    background-color: #FF656C;
 }
-button.transposition-button{
-    background-color: #d2e8df;
-}
-button.identity-button, button.retrograde-button, button.pause-button{
+button.identity-button, button.retrograde-button, button.pause-button, button.transposition-button{
     background-color: #6FC5DD;
 }
 .main-container{
@@ -88,6 +91,8 @@ footer{
     max-width: 600px;
     border-left: #d0d0d0 dotted 1px;
     border-right: #d0d0d0 dotted 1px;
+    border-bottom: #d0d0d0 dotted 1px;
+    border-radius: 10px;
     margin: 10px auto;
 }
 .info{
@@ -96,6 +101,7 @@ footer{
 }
 .info.buttons{
     text-align: center;
+    padding: 5px;
 }
 .keyboard-сontainer{
     padding: 15px;
@@ -169,6 +175,20 @@ footer{
     background-color: #aaaaaa;
     text-align: center;
     outline: none;
+}
+.mask{
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+    z-index: 999;
+    position: fixed;
+    line-height: 100vh;
+    left: 0;
+    top: 0;
+    text-align: center;
+    font-weight: bold;
+    opacity: 0.97;
+    display: none;
 }
 
 @media all and (max-width: 650px){
