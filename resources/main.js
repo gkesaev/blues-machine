@@ -1,9 +1,5 @@
-var context = new AudioContext();
-var duration = 1;
-var interval = 2;
-
 // if (window.location.hostname === "127.0.0.1"){
-if (window.location.hostname === "georgekesaev.github.io"){
+if (window.location.hostname === "georgekesaev.github.io") {
     window.location.href = "http://52.215.130.247:8001/";
 }
 
@@ -12,6 +8,9 @@ window.onload = function () {
     console.log(host);
 };
 
+var context = new AudioContext();
+var duration = 1;
+var interval = 2;
 class Melody{
     constructor(setOfNotes, bpm){
         this._setOfNotes = setOfNotes;
@@ -40,14 +39,14 @@ class Note{
     set isActive(isActive){ this._isActive = isActive;}
     get isActive(){ return this._isActive;}
 
-    enable(){
+    enable(){ 
         this._isActive = true;
         let el = document.querySelector('.note-' + this._name);
         if (el){
             el.classList.remove('disabled');
         }
     }
-    disable(){
+    disable(){ 
         this._isActive = false;
         let el = document.querySelector('.note-' + this._name);
         if (el){
@@ -75,15 +74,16 @@ var notes = {
 var initialSet = new Set();
 var buffer = [];
 
-document.querySelector('.play-button').addEventListener("click", () => startPlay());
-document.querySelector('.stop-button').addEventListener("click", () => stopPlay());
-document.querySelector('.generate-button').addEventListener("mouseup", () => generate());
-document.querySelector('.reset-button').addEventListener("click", () => reset());
-document.querySelector('.identity-button').addEventListener("click", () => addIdentity());
-document.querySelector('.retrograde-button').addEventListener("click", () => addRetrograde());
-document.querySelector('.transposition-button').addEventListener("click", () => addTransposition(4));
-document.querySelector('.pause-button').addEventListener("click", () => addPause());
-document.querySelector('.bpm-value').addEventListener("change", () => transposition(3));
+document.querySelector('.play-button').addEventListener("click", startPlay);
+// document.querySelector('.generate-button').addEventListener("mouseup", generate);
+document.querySelector('.reset-button').addEventListener("click", reset);
+document.querySelector('.identity-button').addEventListener("click", addIdentity);
+document.querySelector('.retrograde-button').addEventListener("click", addRetrograde);
+document.querySelector('.transposition-button').addEventListener("click", addTransposition);
+document.querySelector('.pause-button').addEventListener("click", addPause);
+document.querySelector('.bpm-value').addEventListener("change", () => transposition(document.querySelector("input[name=transposition]").value));
+document.querySelector('.save-button').addEventListener("click", storeSequence);
+document.querySelector('.load-button').addEventListener("click", loadSequence);
 
 function play(frequency, duration, time) {
     let o = context.createOscillator();
@@ -122,7 +122,7 @@ function playNote(note){
     }
 }
 
-function generate(){
+function startPlay(){
     buffer.forEach((note) => {
         playNote(note);
         wait(interval + note.duration * 500);
@@ -135,7 +135,6 @@ function reset(){
     buffer = [];
     document.querySelector('.final-set-keys').innerHTML = "Click on the piano to start playing";
     document.querySelector('.chosen-keys').innerHTML = "Click on the piano to start playing";
-    document.querySelectorAll('button').forEach((x) => x.removeAttribute('disabled'));
 }
 
 function wait(ms){
@@ -168,18 +167,13 @@ function showBuffer(){
     document.querySelector('.final-set-keys').innerHTML = tempBuff.join(", ");
 }
 
-function startPlay(){
-    // document.querySelector('.generate-button').setAttribute('disabled', 'disabled');
-}
+// function generate(){
+//
+// }
 
-function stopPlay(){
-    document.querySelector('.stop-button').setAttribute('disabled', 'disabled');
-    document.querySelector('.generate-button').removeAttribute('disabled');
-    // context.close();
-}
-
-function addTransposition(byHowMuch){
+function addTransposition(){
     let tempBuff = [];
+    let byHowMuch = document.querySelector('input[name="transposition"]').value;
     initialSet.forEach(note => {
         let newNoteId = (note._noteId + byHowMuch) % 12;
         tempBuff.push(notes[newNoteId]);
@@ -194,5 +188,21 @@ function addPause(){
 }
 
 function storeSequence(){
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "https://blues-machine.herokuapp.com/save_song", true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send(JSON.stringify(buffer));
     //save the sequence to the DB
 }
+
+function loadSequence() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            buffer = array.from(this.responseText);
+            showBuffer();
+        }
+    };
+    xhttp.open("GET", "https://blues-machine.herokuapp.com/get_song", true);
+    xhttp.send();
+  }
