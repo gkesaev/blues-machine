@@ -49,9 +49,33 @@
             <p class="chosen-keys">Click on the piano to start playing</p>
             <h2>Final Set</h2>
             <p class="final-set-keys">Click on the piano to start playing</p>
-                <div class="info buttons">
-                <button class="save-button">Save</button>
-                <button class="load-button">Load</button>
+            <div class="info buttons">
+                <button class="save-song">Save</button>
+                <button class="load-song">Load</button>
+            </div>
+            <div class="popup-mask"></div>
+            <div class="popup save-popup">
+                <div class="popup-header">
+                    <div class="close-popup">x</div>
+                    <span><strong>Saving the song...</strong></span>
+                </div>
+                <div clear="both"></div>
+                
+                <div class="popup-content">
+                    Your song number is: <span class="saved-song-number">(loading...)</span><br><br>
+                    Save this number to load in the future.
+                </div>
+            </div>
+            <div class="popup load-popup">
+                <div class="popup-header">
+                    <div class="close-popup">x</div>
+                    <span><strong>Load a song by ID</strong></span>
+                </div>
+                <div clear="both"></div>
+                <div class="popup-content">
+                    <label for="songNumber">Song Number: </label><input name="songNumber" type="number" />
+                    <button class="load-button">Load</button>
+                </div>
             </div>
         </div>
         <div class="info instructions">

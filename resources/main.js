@@ -3,13 +3,8 @@ if (window.location.hostname === "georgekesaev.github.io") {
     window.location.href = "http://52.215.130.247:8001/";
 }
 
-window.onload = function () {
-    let host = window.location.hostname;
-    console.log(host);
-};
-
 var context = new AudioContext();
-var duration = 1;
+// var duration = 1;
 var interval = 2;
 class Melody{
     constructor(setOfNotes, bpm){
@@ -43,14 +38,14 @@ class Note{
         this._isActive = true;
         let el = document.querySelector('.note-' + this._name);
         if (el){
-            el.classList.remove('disabled');
+            el.classList.remove('disabled-key');
         }
     }
     disable(){ 
         this._isActive = false;
         let el = document.querySelector('.note-' + this._name);
         if (el){
-            el.classList.add('disabled');
+            el.classList.add('disabled-key');
         }
     }
 }
@@ -81,9 +76,12 @@ document.querySelector('.identity-button').addEventListener("click", addIdentity
 document.querySelector('.retrograde-button').addEventListener("click", addRetrograde);
 document.querySelector('.transposition-button').addEventListener("click", addTransposition);
 document.querySelector('.pause-button').addEventListener("click", addPause);
+
 document.querySelector('.bpm-value').addEventListener("change", () => transposition(document.querySelector("input[name=transposition]").value));
-document.querySelector('.save-button').addEventListener("click", storeSequence);
-document.querySelector('.load-button').addEventListener("click", loadSequence);
+
+document.querySelector('.save-song').addEventListener("click", storeSequence);
+document.querySelector('.load-song').addEventListener("click", showLoadSongPopup);
+document.querySelectorAll('.close-popup').forEach(popup => popup.addEventListener("click", hidePopup));
 
 function play(frequency, duration, time) {
     let o = context.createOscillator();
@@ -101,6 +99,14 @@ function onNoteClick(noteId){
         note.disable();
         addToBuffer(note);
         playNote(note);
+    }
+}
+
+function loadNote(noteId){
+    let note = notes[noteId];
+    if (note._isActive){
+        note.disable();
+        addToBuffer(note);
     }
 }
 
@@ -189,20 +195,51 @@ function addPause(){
 
 function storeSequence(){
     var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let songId = JSON.parse(xhttp.responseText).song_id;
+            
+            document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>"
+        }
+     };
     xhttp.open("POST", "https://blues-machine.herokuapp.com/save_song", true);
     xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send(JSON.stringify(buffer));
-    //save the sequence to the DB
+    let data = [];
+    buffer.forEach(note => data.push(note._noteId));
+    xhttp.send(JSON.stringify(data));
+
+    showSaveSongPopup();
 }
 
 function loadSequence() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            buffer = array.from(this.responseText);
+            let responseBuffer = JSON.parse(this.responseText).notes;
+
+            responseBuffer.forEach(noteId => loadNote(noteId));
             showBuffer();
+            hidePopup();
         }
     };
     xhttp.open("GET", "https://blues-machine.herokuapp.com/get_song", true);
     xhttp.send();
-  }
+}
+
+function showSaveSongPopup(){
+    document.querySelector('.popup-mask').style.display="initial";
+    document.querySelector('.save-popup').style.display="initial";
+}
+
+function showLoadSongPopup(){
+    document.querySelector('.load-button').addEventListener("click", loadSequence);
+    document.querySelector('.popup-mask').style.display="initial";
+    document.querySelector('.load-popup').style.display="initial";
+}
+
+function hidePopup(){
+    document.querySelector('.popup-mask').style.display="none";
+    document.querySelector('.load-button').removeEventListener("click", loadSequence);
+    document.querySelector('.save-popup').style.display="none";
+    document.querySelector('.load-popup').style.display="none";
+}
