@@ -1,6 +1,5 @@
-// if (window.location.hostname === "127.0.0.1"){
 if (window.location.hostname === "georgekesaev.github.io") {
-    window.location.href = "http://52.215.130.247:8001/";
+    window.location.href = "https://blues-machine.herokuapp.com/";
 }
 
 var context = new AudioContext();
@@ -34,14 +33,14 @@ class Note{
     set isActive(isActive){ this._isActive = isActive;}
     get isActive(){ return this._isActive;}
 
-    enable(){ 
+    enable(){
         this._isActive = true;
         let el = document.querySelector('.note-' + this._name);
         if (el){
             el.classList.remove('disabled-key');
         }
     }
-    disable(){ 
+    disable(){
         this._isActive = false;
         let el = document.querySelector('.note-' + this._name);
         if (el){
@@ -194,36 +193,70 @@ function addPause(){
 }
 
 function storeSequence(){
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            let songId = JSON.parse(xhttp.responseText).song_id;
-            
-            document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>"
-        }
-     };
-    xhttp.open("POST", "https://blues-machine.herokuapp.com/save_song", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    let data = [];
-    buffer.forEach(note => data.push(note._noteId));
-    xhttp.send(JSON.stringify(data));
+    // var xhttp = new XMLHttpRequest();
+    // xhttp.onreadystatechange = function() {
+    //     if (this.readyState == 4 && this.status == 200) {
+    //         let songId = JSON.parse(xhttp.responseText).song_id;
 
+    //         document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>"
+    //     }
+    //  };
+    // xhttp.open("POST", "/save_song", true);
+    // // xhttp.open("POST", "https://blues-machine.herokuapp.com/save_song", true);
+    // xhttp.setRequestHeader("Content-type", "application/json");
+    // let data = [];
+    // buffer.forEach(note => data.push(note._noteId));
+    // xhttp.send(JSON.stringify(data));
+    saveSong();
     showSaveSongPopup();
 }
 
-function loadSequence() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            let responseBuffer = JSON.parse(this.responseText).notes;
+function saveSong(){
+    let data = [];
+    buffer.forEach(note => data.push(note._noteId));
+    let p = request('POST', "/save_song", data=data)
+    .then(reply => {
+        console.log(reply);
+        reply = JSON.parse(reply);
+    })
+    .catch(err => console.error(err));
+}
 
-            responseBuffer.forEach(noteId => loadNote(noteId));
-            showBuffer();
-            hidePopup();
-        }
-    };
-    xhttp.open("GET", "https://blues-machine.herokuapp.com/get_song", true);
-    xhttp.send();
+function loadSequence() {
+    // var xhttp = new XMLHttpRequest();
+    // xhttp.onreadystatechange = function() {
+    //     if (this.readyState == 4 && this.status == 200) {
+    //         let responseBuffer = JSON.parse(this.responseText).notes;
+
+    //         responseBuffer.forEach(noteId => loadNote(noteId));
+    //         showBuffer();
+    //         hidePopup();
+    //     }
+    // };
+    // xhttp.open("GET", "/get_song", true);
+    // xhttp.responseType= "text";
+    // // xhttp.open("GET", "https://blues-machine.herokuapp.com/get_song", true);
+    let song = {
+        "songID": document.getElementsByName("songID")[0].value
+    }
+    console.log(song);
+    console.log(JSON.stringify(song));
+    // xhttp.send(JSON.stringify(song));
+    getSong(song);
+
+    // fetch("/get_song", {headers:{"content-type":"application/json; charset=UTF-8"}, body:JSON.stringify(song),method:'POST'})
+    // .then(data => console.log(data.json()))
+    // .then(res => console.log(res))
+    // .catch(err => error.log(err));
+}
+
+function getSong(song){
+    let p = request('GET', '/get_song', data=song);
+    p.then(reply => {
+        console.log(reply);
+        reply = JSON.parse(reply);
+    })
+    .catch(err => console.error(err));
 }
 
 function showSaveSongPopup(){
@@ -242,4 +275,19 @@ function hidePopup(){
     document.querySelector('.load-button').removeEventListener("click", loadSequence);
     document.querySelector('.save-popup').style.display="none";
     document.querySelector('.load-popup').style.display="none";
+}
+
+function request(method, url, data = '') {
+    console.log(data);
+    return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+        // xhr.responseType = 'text';
+        // xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.addEventListener('load', e => resolve(JSON.parse(e.target.responseText)));
+        xhr.addEventListener('error', e => reject);
+        console.log(JSON.stringify(data));
+        xhr.send(JSON.stringify(data));
+        // xhr.send(data);
+    });
 }
