@@ -65,6 +65,13 @@ button.reset-button{
 button.identity-button, button.retrograde-button, button.pause-button, button.transposition-button{
     background-color: #6FC5DD;
 }
+button.load-button {
+    position: relative;
+    top: 40%;
+    float: right;
+    background-color: #273045;
+    color: white;
+}
 .main-container{
     position: relative;
     top: 10vh;
@@ -160,11 +167,11 @@ footer{
     margin-bottom: 20px;
     border-radius: 100%;
 }
-.disabled{
+.disabled-key{
     background-image: url("./images/bg.png");
     cursor: initial;
 }
-.disabled:active{
+.disabled-key:active{
     background-color: #999999;
 }
 .bpm-value{
@@ -189,6 +196,63 @@ footer{
     font-weight: bold;
     opacity: 0.97;
     display: none;
+}
+.popup-mask{
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+    z-index: 998;
+    position: fixed;
+    left: 0;
+    top: 0;
+    text-align: center;
+    font-weight: bold;
+    opacity: 0.97;
+    display: none;
+}
+.popup{
+    display: none;
+    width: 300px;
+    height: 200px;
+    position: fixed;
+    top: 50%;
+    margin-top: -100px;
+    left: 50%;
+    margin-left: -150px;
+    opacity: 1;
+    background-color: #fafafa;
+    z-index: 999;
+    border: 2px solid #273045;
+    border-radius: 5px;
+}
+
+.close-popup {
+    background-color: crimson;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.close-popup:active {
+    background-color: #FF656C;
+}
+
+.popup-header{
+    height: 20px;
+    background-color: #273045;
+    padding: 10px;
+    color: white;
+}
+
+.popup-content {
+    padding: 10px;
+    height: 140px;
 }
 
 @media all and (max-width: 650px){
