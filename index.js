@@ -13,16 +13,58 @@ let assert = require('assert');
 var bodyParser = require('body-parser');
 var app = express();        // https://expressjs.com/en/guide/routing.html
 
+var songRouter = express.Router();
+// songRouter.get('/', (req, res) => {
+
+// });
+
+songRouter.post('/', (req, res) => {
+    console.log(moment().format() + " requested to save song");
+    console.log("save song: " + req.body.notes);
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        // assert.equal(null, err);
+        if (err) {
+            console.error(err);
+            res.statusCode = 500;
+            return res.json({
+                errors: ['Couldnt connect to server']
+            });
+        }
+        console.log("Connected correctly to server");
+
+        const dbo = db.db("blues-notes");
+        let song = req.body;
+        const collection = dbo.collection("notes");
+        collection.insertOne(song, function (err, result) {
+            if (err) {
+                console.error(err);
+                res.statusCode = 500;
+                return res.json({
+                    errors: ['Failed to save a song']
+                })
+            }
+            res.setHeader('Content-Type', 'application/json');
+            res.statusCode = 201;
+            let saved_song_id = result.ops[0]._id;
+            console.log("1 song inserted, id: " + saved_song_id);
+            res.json(saved_song_id);
+            db.close();
+        });
+    });
+});
+// songRouter.get('song/:id', findSongByID, (req, res) => {
+//     console.log("songRouter.get('song/:id', findSongByID, (req, res) =>");
+//     res.setHeader('Content-Type', 'application/json');
+//     res.statusCode = 200;
+//     res.json(req.song);
+// });
+
 app.use('/resources', express.static(path.join(__dirname, 'public')))
     .use(bodyParser.json({ type: 'application/json' }))
     .use(express.json())
-    .use(express.urlencoded({ extended: false }));
+    .use(express.urlencoded({ extended: false }))
+    .use('/song', songRouter);
 
-// app.use(function (req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content - Type, Accept");
-//     next();
-// });
 
 let fs = require('fs');
 if (fs.existsSync('./credentials.json')){
@@ -45,60 +87,102 @@ console.log(uri);
 var MongoClient = require('mongodb').MongoClient;
 
 
-app.post("/save_song", (req, res) => {
-    console.log(moment().format() + " requested to save song");
-    console.log("save song: " + req.body.kaka);
-    res.setHeader('Content-Type', 'application/json');
-    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
-        // assert.equal(null, err);
-        if (err) throw err;
-        console.log("Connected correctly to server");
+// app.post("/save_song", (req, res) => {
+//     console.log(moment().format() + " requested to save song");
+//     console.log("save song: " + req.body.notes);
+//     res.setHeader('Content-Type', 'application/json');
+//     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+//         // assert.equal(null, err);
+//         if (err) throw err;
+//         console.log("Connected correctly to server");
 
-        const dbo = db.db("blues-notes");
-        let song = req.body;
-        const collection = dbo.collection("notes");
-        collection.insertOne(song, function (err, result) {
-            if (err){
-                console.error(err);
-                res.statusCode = 500;
-                return res.json({
-                    errors: ['Failed to save a song']
-                })
-            }
-            console.log("1 song inserted");
-            res.statusCode = 201;
-            res.json(result.ops[0]._id);
-            db.close();
-        });
-    });
-});
+//         const dbo = db.db("blues-notes");
+//         let song = req.body;
+//         const collection = dbo.collection("notes");
+//         collection.insertOne(song, function (err, result) {
+//             if (err){
+//                 console.error(err);
+//                 res.statusCode = 500;
+//                 return res.json({
+//                     errors: ['Failed to save a song']
+//                 })
+//             }
+//             console.log("1 song inserted");
+//             res.statusCode = 201;
+//             res.json(result.ops[0]._id);
+//             db.close();
+//         });
+//     });
+// });
 
 
 var ObjectID = require('mongodb').ObjectID;
 
 
-app.get("/get_song", (req, res) => {
+// app.get("/get_song", (req, res) => {
+//     console.log(moment().format() + " requested to load/get a song");
+//     console.log("get song: " + (req.body.songID));
+//     res.setHeader('Content-Type', 'application/json');
+//     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+//         // assert.equal(null, err);
+//         if (err) throw err;
+//         console.log("Connected correctly to server");
+
+//         const dbo = db.db("blues-notes");
+//         dbo.collection("notes").findOne({ _id: new ObjectID(req.body.songID) }, (err, result) => {
+//             if (err) throw err;
+//             else {
+//                 console.log("1 song found");
+//                 console.log(JSON.stringify(result));
+//                 res.status(200);
+//                 res.send(JSON.stringify(result));
+//                 db.close();
+//             }
+//         });
+//     });
+// });
+
+
+app.get('/song/:id', findSongByID, (req, res) => {
+
+});
+
+
+function findSongByID(req, res) {
+    let song_id = req.params.id
     console.log(moment().format() + " requested to load/get a song");
-    console.log("get song: " + (req.body.songID));
-    res.setHeader('Content-Type', 'application/json');
+    console.log("get song: " + song_id);
+
     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
         // assert.equal(null, err);
-        if (err) throw err;
-        console.log("Connected correctly to server");
+        if (err){
+            console.error(err);
+            res.statusCode = 500;
+            return res.json({
+                errors: ['Couldnt find song']
+            });
+        }
+
+        console.log("Connected to Mongo server");
 
         const dbo = db.db("blues-notes");
-        dbo.collection("notes").findOne({ _id: new ObjectID(req.body.songID) }, (err, result) => {
-            if (err) throw err;
-            else {
-                console.log("1 song found");
-                console.log(JSON.stringify(result));
-                res.status(200);
-                res.send(JSON.stringify(result));
-                db.close();
+        dbo.collection("notes").findOne({ _id: new ObjectID(song_id) }, (err, result) => {
+            if (err) {
+                console.error(err);
+                res.statusCode = 404;
+                return res.json({
+                    errors: ['Couldnt find song']
+                });
             }
+            console.log("1 song found");
+            console.log(JSON.stringify(result));
+            res.setHeader('Content-Type', 'application/json');
+            res.statusCode = 200;
+            res.json(result);
+            db.close();
         });
     });
-});
+}
 
 
 app.get("/countSongs", (req, res) => {

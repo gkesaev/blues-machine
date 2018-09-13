@@ -193,70 +193,43 @@ function addPause(){
 }
 
 function storeSequence(){
-    // var xhttp = new XMLHttpRequest();
-    // xhttp.onreadystatechange = function() {
-    //     if (this.readyState == 4 && this.status == 200) {
-    //         let songId = JSON.parse(xhttp.responseText).song_id;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let songId = JSON.parse(xhttp.responseText).song_id;
 
-    //         document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>"
-    //     }
-    //  };
-    // xhttp.open("POST", "/save_song", true);
-    // // xhttp.open("POST", "https://blues-machine.herokuapp.com/save_song", true);
-    // xhttp.setRequestHeader("Content-type", "application/json");
-    // let data = [];
-    // buffer.forEach(note => data.push(note._noteId));
-    // xhttp.send(JSON.stringify(data));
-    saveSong();
+            document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>"
+        }
+     };
+    let n = [];
+    buffer.forEach(note => n.push(note._noteId));
+    let data = {};
+    data.notes = n;
+    let p = request('POST', '/song', data);
+    p.then(res => {
+        console.log("then res: " + JSON.stringify(res));
+        let songId = res;
+        document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>";
+    })
+    .catch(err => console.error("catch err: " + err));
     showSaveSongPopup();
 }
 
-function saveSong(){
-    let data = [];
-    buffer.forEach(note => data.push(note._noteId));
-    let p = request('POST', "/save_song", data=data)
-    .then(reply => {
-        console.log(reply);
-        reply = JSON.parse(reply);
-    })
-    .catch(err => console.error(err));
-}
-
 function loadSequence() {
-    // var xhttp = new XMLHttpRequest();
-    // xhttp.onreadystatechange = function() {
-    //     if (this.readyState == 4 && this.status == 200) {
-    //         let responseBuffer = JSON.parse(this.responseText).notes;
+    let load_id =  document.getElementsByName("songID")[0].value;
+    console.log("loading id: " + load_id);
 
-    //         responseBuffer.forEach(noteId => loadNote(noteId));
-    //         showBuffer();
-    //         hidePopup();
-    //     }
-    // };
-    // xhttp.open("GET", "/get_song", true);
-    // xhttp.responseType= "text";
-    // // xhttp.open("GET", "https://blues-machine.herokuapp.com/get_song", true);
-    let song = {
-        "songID": document.getElementsByName("songID")[0].value
-    }
-    console.log(song);
-    console.log(JSON.stringify(song));
-    // xhttp.send(JSON.stringify(song));
-    getSong(song);
+    let p = request("GET", "/song/" + load_id);
+    p.then(res => {
+        console.log("then res: " + JSON.stringify(res));
+        console.log("then res: " + res.notes);
+        let responseBuffer = res.notes;
 
-    // fetch("/get_song", {headers:{"content-type":"application/json; charset=UTF-8"}, body:JSON.stringify(song),method:'POST'})
-    // .then(data => console.log(data.json()))
-    // .then(res => console.log(res))
-    // .catch(err => error.log(err));
-}
-
-function getSong(song){
-    let p = request('GET', '/get_song', data=song);
-    p.then(reply => {
-        console.log(reply);
-        reply = JSON.parse(reply);
+        responseBuffer.forEach(noteId => loadNote(noteId));
+        showBuffer();
+        hidePopup();
     })
-    .catch(err => console.error(err));
+    .catch(err => console.error("catch err: " + err));
 }
 
 function showSaveSongPopup(){
@@ -277,17 +250,16 @@ function hidePopup(){
     document.querySelector('.load-popup').style.display="none";
 }
 
-function request(method, url, data = '') {
+function request(method, url, data = {}) {
     console.log(data);
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
-        xhr.open(method, url, true);
-        // xhr.responseType = 'text';
-        // xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.withCredentials = true;
         xhr.addEventListener('load', e => resolve(JSON.parse(e.target.responseText)));
-        xhr.addEventListener('error', e => reject);
-        console.log(JSON.stringify(data));
+        xhr.addEventListener('error', e => reject(JSON.parse(e.target.responseText)));
+        console.log("sending: " + JSON.stringify(data) + ", to URL: " + url);
+        xhr.open(method, url);
+        xhr.setRequestHeader("content-type", "application/json");
         xhr.send(JSON.stringify(data));
-        // xhr.send(data);
     });
 }
