@@ -8,24 +8,63 @@ const PORT = process.env.PORT || 8000;
 let moment = require('moment');
 let logRequest = require('log-request');
 let express = require('express');
-// let app = express();        // https://expressjs.com/en/guide/routing.html
-// app.use(express.static('client'));
-let app = express();
+let assert = require('assert');
 
-// app.use(express.static(
-    // path.join(__dirname, 'public')))
-    // .set('views', path.join(__dirname, 'views'))
-    // .engine('html', require('ejs').renderFile)
-    // .set('view engine', 'html')
-    // .get('/', (req, res) => res.render('pages/index'))
-    // .get('/cool', (req, res) => res.send(cool()))
+var bodyParser = require('body-parser');
+var app = express();        // https://expressjs.com/en/guide/routing.html
 
-// let server = app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+var songRouter = express.Router();
+// songRouter.get('/', (req, res) => {
 
+// });
 
-// let port = process.env.PORT || 8000;;
-let html_address = '';
-let mongo = require('mongodb').MongoClient;
+songRouter.post('/', (req, res) => {
+    console.log(moment().format() + " requested to save song");
+    console.log("save song: " + req.body.notes);
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        // assert.equal(null, err);
+        if (err) {
+            console.error(err);
+            res.statusCode = 500;
+            return res.json({
+                errors: ['Couldnt connect to server']
+            });
+        }
+        console.log("Connected correctly to server");
+
+        const dbo = db.db("blues-notes");
+        let song = req.body;
+        const collection = dbo.collection("notes");
+        collection.insertOne(song, function (err, result) {
+            if (err) {
+                console.error(err);
+                res.statusCode = 500;
+                return res.json({
+                    errors: ['Failed to save a song']
+                })
+            }
+            res.setHeader('Content-Type', 'application/json');
+            res.statusCode = 201;
+            let saved_song_id = result.ops[0]._id;
+            console.log("1 song inserted, id: " + saved_song_id);
+            res.json(saved_song_id);
+            db.close();
+        });
+    });
+});
+// songRouter.get('song/:id', findSongByID, (req, res) => {
+//     console.log("songRouter.get('song/:id', findSongByID, (req, res) =>");
+//     res.setHeader('Content-Type', 'application/json');
+//     res.statusCode = 200;
+//     res.json(req.song);
+// });
+
+app.use('/resources', express.static(path.join(__dirname, 'public')))
+    .use(bodyParser.json({ type: 'application/json' }))
+    .use(express.json())
+    .use(express.urlencoded({ extended: false }))
+    .use('/song', songRouter);
+
 
 let fs = require('fs');
 if (fs.existsSync('./credentials.json')){
@@ -35,131 +74,160 @@ if (fs.existsSync('./credentials.json')){
 else {
     var credentials = process.env;
 }
-// const mongo_url = 'mongodb://' + credentials.mongoUser + ':' +
-//     credentials.mongoPass + '@' +
-//                                 credentials.db_server + ':' +
-//                                 credentials.port + '/' +
-//                                 credentials.db
 
+
+// var uri = "mongodb+srv://user:pass@sever/db";  // + "?retryWrites=true";
 const uri = 'mongodb+srv://' + credentials.mongoUser + ':' +
     credentials.mongoPass + '@' +
     credentials.mongoServer + '/' +
     // credentials.port + '/' +
-    credentials.mongoDB;
+    credentials.mongoDB
+    + "?retryWrites=true";
 console.log(uri);
 var MongoClient = require('mongodb').MongoClient;
 
-// var uri = "mongodb+srv://heroku:KgfrWRrVi4puRjgc@bluesmachine-nyn8p.gcp.mongodb.net/blues-notes";// + "?retryWrites=true";
-MongoClient.connect(uri, { useNewUrlParser: true }, function (err, client) {
-    const collection = client.db("blues-notes").collection("notes");
-    // perform actions on the collection object
-    collection.insertMany([{ name: "gosha", age: 32 }, { name: "gosha", age: 18 }], (err, result) => {
-        // console.log(`Inserted ${result.result.n} records`);
-        // collection.find({ name: "gosha" }).toArray((err, result) => {
-        // result = collection.estimatedDocumentCount({ name: "gosha" });//.toArray((err, result) => {
-            // console.log(result);
-            // res.send(String(result));
-            // client.close();
-        // });
-    });
-    client.close();
+
+// app.post("/save_song", (req, res) => {
+//     console.log(moment().format() + " requested to save song");
+//     console.log("save song: " + req.body.notes);
+//     res.setHeader('Content-Type', 'application/json');
+//     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+//         // assert.equal(null, err);
+//         if (err) throw err;
+//         console.log("Connected correctly to server");
+
+//         const dbo = db.db("blues-notes");
+//         let song = req.body;
+//         const collection = dbo.collection("notes");
+//         collection.insertOne(song, function (err, result) {
+//             if (err){
+//                 console.error(err);
+//                 res.statusCode = 500;
+//                 return res.json({
+//                     errors: ['Failed to save a song']
+//                 })
+//             }
+//             console.log("1 song inserted");
+//             res.statusCode = 201;
+//             res.json(result.ops[0]._id);
+//             db.close();
+//         });
+//     });
+// });
+
+
+var ObjectID = require('mongodb').ObjectID;
+
+
+// app.get("/get_song", (req, res) => {
+//     console.log(moment().format() + " requested to load/get a song");
+//     console.log("get song: " + (req.body.songID));
+//     res.setHeader('Content-Type', 'application/json');
+//     MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+//         // assert.equal(null, err);
+//         if (err) throw err;
+//         console.log("Connected correctly to server");
+
+//         const dbo = db.db("blues-notes");
+//         dbo.collection("notes").findOne({ _id: new ObjectID(req.body.songID) }, (err, result) => {
+//             if (err) throw err;
+//             else {
+//                 console.log("1 song found");
+//                 console.log(JSON.stringify(result));
+//                 res.status(200);
+//                 res.send(JSON.stringify(result));
+//                 db.close();
+//             }
+//         });
+//     });
+// });
+
+
+app.get('/song/:id', findSongByID, (req, res) => {
+
 });
 
-app.get("/count", (req, res) => {
-    console.log(moment().format() + " counting songs");
-    collection.count({ name: "gosha" });
 
-    mongo.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
-        console.log('Connected successfully to database');
+function findSongByID(req, res) {
+    let song_id = req.params.id
+    console.log(moment().format() + " requested to load/get a song");
+    console.log("get song: " + song_id);
 
-        let db = client.db(credentials.db);
-        let collection = db.collection(credentials.collection);
-        collection.insertMany([{ name: "kkkk" }, { name: "param" }], (err, result) => {
-            console.log(`Inserted ${result.result.n} records`);
-            // collection.find({ name: "gosha" }).toArray((err, result) => {
-            collection.count({ name: "gosha" }).toArray((err, result) => {
-                console.log(result);
-                res.send(String(result));
-                client.close();
+    MongoClient.connect(uri, { useNewUrlParser: true }, function (err, db) {
+        // assert.equal(null, err);
+        if (err){
+            console.error(err);
+            res.statusCode = 500;
+            return res.json({
+                errors: ['Couldnt find song']
             });
+        }
 
+        console.log("Connected to Mongo server");
+
+        const dbo = db.db("blues-notes");
+        dbo.collection("notes").findOne({ _id: new ObjectID(song_id) }, (err, result) => {
+            if (err) {
+                console.error(err);
+                res.statusCode = 404;
+                return res.json({
+                    errors: ['Couldnt find song']
+                });
+            }
+            console.log("1 song found");
+            console.log(JSON.stringify(result));
+            res.setHeader('Content-Type', 'application/json');
+            res.statusCode = 200;
+            res.json(result);
+            db.close();
         });
     });
+}
+
+
+app.get("/countSongs", (req, res) => {
+    console.log(moment().format() + " counting songs");
+    // collection.count({ name: "gosha" });
+
+    // MongoClient.connect(mongo_url, { useNewUrlParser: true }, (err, client) => {
+    //     console.log('Connected successfully to database');
+
+    //     let db = client.db(credentials.db);
+    //     let collection = db.collection(credentials.collection);
+    //     collection.insertMany([{ name: "kkkk" }, { name: "param" }], (err, result) => {
+    //         console.log(`Inserted ${result.result.n} records`);
+    //         // collection.find({ name: "gosha" }).toArray((err, result) => {
+    //         collection.count({ name: "gosha" }).toArray((err, result) => {
+    //             console.log(result);
+    //             res.send(String(result));
+    //             client.close();
+    //         });
+
+    //     });
+    // });
 });
 
-// let path = require("path");
 
 app.get("/", (req, res) => {
     console.log(moment().format() + " serve index");
     res.sendFile(path.join(__dirname + '/index.html'));
-});
-
-app.get("/index.html", (req, res) => {
+}).get("/index.html", (req, res) => {
     console.log(moment().format() + " serve index");
     res.sendFile(path.join(__dirname + '/index.html'));
 });
+
 
 app.get("/resources/main.js", (req, res) => {
     console.log("serve js");
     res.sendFile(path.join(__dirname + "/resources/main.js"));
 });
 
+
 app.get("/resources/style.css", (req, res) => {
     console.log("serve css");
     res.sendFile(path.join(__dirname + "/resources/style.css"));
 });
 
-app.post("/save_song", (req, res) => {
-    console.log(moment().format() + " requested to save song");
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({"song_id" : 123456789}));
-});
-
-app.get("/get_song", (req, res) => {
-    console.log(moment().format() + " requested to get song");
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ "song_id": 123456789, "notes" : ["A1", "G3"] }));
-});
-
-app.post("/code_update", (req, res) => {
-    console.log(moment().format() + " update repo request from GitHub");
-    require('simple-git')()
-        .exec(() => console.log(moment().format() + 'Checking out ...'))
-        .pull((err, update) => {
-            if (update && update.summary.changes) {
-                // console.log(moment().format() + "restarting")
-                // require('child_process').exec('npm restart');
-            }
-            if (err) {
-                console.error(err);
-            }
-        })
-        .exec(() => console.log(moment().format() + ' pull done.'));
-    res.sendFile(path.join(__dirname + '/index.html'));
-});
-
-app.get("/checkout", (req, res) => {
-    // let branch = req.params.branch;
-    let branch = req.query.branch;
-    console.log(moment().format() + " requested branch: " + branch);
-    if (branch === 'george' || branch === 'sergey' || branch === 'master'){
-        console.log(moment().format() + " checkout " + branch + " branch");
-        require('simple-git')()
-            .exec(() => console.log(moment().format() + ' Checking out ...'))
-            .checkout('george', (err, update) => {
-                if (update && update.summary.changes) {
-                    // console.log(moment().format() + "restarting")
-                    // require('child_process').exec('npm restart');
-                }
-                if (err) {
-                    console.error(err);
-                }
-            })
-            .exec(() => console.log(moment().format() + ' Checkout done.'))
-            .exec(() => res.redirect('/index.html'));
-        res.sendFile(path.join(__dirname + '/index.html'));
-    }
-});
 
 app.get('/api/moment', logRequest, (req, res) => {
     console.log(moment().format() + " test moment for fun");
@@ -167,9 +235,11 @@ app.get('/api/moment', logRequest, (req, res) => {
     // handleMoment(req, res, req.query); //TODO: remove
 });
 
+
 app.get('/the-answer', logRequest, (req, res) => {
     res.send(String(42));
 });
+
 
 // instead of sending 400
 app.get('*', function (req, res) {
@@ -177,35 +247,13 @@ app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, '42.html'));
 });
 
-// var server = app.listen(port, html_address, function () {
 
-var server = app.listen(PORT, "", function () {
+// Start server
+const server = app.listen(PORT, "", function () {
 
     let host = server.address().address
     let port = server.address().port;
     const computerName = require('os').hostname();
     console.log("name: " + computerName);
-    if (computerName !== "ip-172-31-34-177"){
-        console.log("BluesMachine app listening at http://%s:%s", host, port);
-    }
-    else {
-        const https = require('https');
-        https.get('https://api.ipify.org/', (resp) => {
-            let data = '';
-
-            // A chunk of data has been recieved.
-            resp.on('data', (chunk) => {
-                data += chunk;
-            });
-
-            // The whole response has been received. Print out the result.
-            resp.on('end', () => {
-                // console.log(JSON.parse(data).explanation);
-                console.log("BluesMachine app listening at http://%s:%s", data, port);
-            });
-
-        }).on("error", (err) => {
-            console.log("Error: " + err.message);
-        });
-    }
+    console.log("BluesMachine app listening at http://%s:%s", host, port);
 })
