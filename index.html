@@ -61,9 +61,14 @@
                 </div>
                 <div clear="both"></div>
 
-                <div class="popup-content">
+                <div class="popup-content tooltip">
                     Your song ID is: <span class="saved-song-number">(loading...)</span><br><br>
                     Save this ID to load in the future.
+                    <button class="info buttons copy" id="copyToClipboard">
+                        Copy song ID to clipboard
+                        <span class="tooltiptext" id="copyToClipboardTooltip">
+                            Copy to clipboard
+                        </span></button>
                 </div>
             </div>
             <div class="popup load-popup">

@@ -81,6 +81,9 @@ document.querySelector('.bpm-value').addEventListener("change", () => transposit
 document.querySelector('.save-song').addEventListener("click", storeSequence);
 document.querySelector('.load-song').addEventListener("click", showLoadSongPopup);
 document.querySelectorAll('.close-popup').forEach(popup => popup.addEventListener("click", hidePopup));
+document.querySelectorAll('.popup-mask').forEach(mask => mask.addEventListener('click', hidePopup));
+document.getElementById("copyToClipboard").addEventListener("click", copyToClipboard);
+document.getElementById("copyToClipboard").addEventListener('mouseover', outFunc);
 
 function play(frequency, duration, time) {
     let o = context.createOscillator();
@@ -193,14 +196,6 @@ function addPause(){
 }
 
 function storeSequence(){
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            let songId = JSON.parse(xhttp.responseText).song_id;
-
-            document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>"
-        }
-     };
     let n = [];
     buffer.forEach(note => n.push(note._noteId));
     let data = {};
@@ -210,6 +205,7 @@ function storeSequence(){
         console.log("then res: " + JSON.stringify(res));
         let songId = res;
         document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>";
+        document.getElementById("copyToClipboard").style.visibility = "visible";
     })
     .catch(err => console.error("catch err: " + err));
     showSaveSongPopup();
@@ -248,6 +244,7 @@ function hidePopup(){
     document.querySelector('.load-button').removeEventListener("click", loadSequence);
     document.querySelector('.save-popup').style.display="none";
     document.querySelector('.load-popup').style.display="none";
+    document.getElementById("copyToClipboard").style.visibility = "hidden";
 }
 
 function request(method, url, data = {}) {
@@ -262,4 +259,23 @@ function request(method, url, data = {}) {
         xhr.setRequestHeader("content-type", "application/json");
         xhr.send(JSON.stringify(data));
     });
+}
+
+function copyToClipboard() {
+    var textArea = document.createElement("textarea");
+    textArea.value = document.querySelector(".saved-song-number").textContent;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+    let tooltip = document.getElementById("copyToClipboardTooltip");
+    tooltip.innerHTML = "Copied: " + document.querySelector(".saved-song-number").textContent;
+}
+
+function outFunc() {
+    console.log("here");
+    let tooltip = document.getElementById("copyToClipboardTooltip");
+    tooltip.innerHTML = "Copy to clipboard";
 }
