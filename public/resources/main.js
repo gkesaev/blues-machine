@@ -5,12 +5,7 @@ if (window.location.hostname === "georgekesaev.github.io") {
 var context = new AudioContext();
 // var duration = 1;
 var interval = 2;
-class Melody{
-    constructor(setOfNotes, bpm){
-        this._setOfNotes = setOfNotes;
-        this._bpm = bpm;
-    }
-}
+
 class Note{
     constructor(noteId, name, displayName, freqArr, duration = 1){
         this._noteId = noteId;
@@ -76,7 +71,7 @@ document.querySelector('.identity-button').addEventListener("click", addIdentity
 document.querySelector('.retrograde-button').addEventListener("click", addRetrograde);
 document.querySelector('.transposition-button').addEventListener("click", addTransposition);
 
-document.querySelector('.bpm-value').addEventListener("change", () => transposition(document.querySelector("input[name=transposition]").value));
+// document.querySelector('.bpm-value').addEventListener("change", () => transposition(document.querySelector("input[name=transposition]").value));
 
 document.querySelector('.save-song').addEventListener("click", storeSequence);
 document.querySelector('.load-song').addEventListener("click", showLoadSongPopup);
@@ -169,9 +164,9 @@ function addRetrograde(){
     showBuffer();
 }
 
-function changeBPM(){
-    document.querySelector('.bpm-value').value;
-}
+// function changeBPM(){
+//     document.querySelector('.bpm-value').value;
+// }
 
 function showBuffer(){
     let tempBuff = [];
@@ -230,7 +225,8 @@ function loadSequence() {
             let tmpSet = new Set();
             responseBuffer.forEach(n => {
                 if (initialSet.size < 12) {
-                    initialSet.add(n);
+                    notes[n._noteId].disable();
+                    initialSet.add(notes[n._noteId]);
                     if (initialSet.size == 1) {
                         chosen_keys.innerHTML = n._displayName;
                     }
@@ -238,7 +234,7 @@ function loadSequence() {
                         chosen_keys.innerHTML += ", " + n._displayName;
                     }
                 }
-                tmpSet.add(n);
+                tmpSet.add(notes[n._noteId]);
             })
             buffer = Array.from(tmpSet);
             showBuffer();
