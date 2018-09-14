@@ -129,15 +129,15 @@ function addToBuffer(note){
 }
 
 function playNote(note){
-    for (let i = 0; i < note.freqArr.length; i++) {
-        play(note.freqArr[i], note.duration, i * interval);
+    for (let i = 0; i < note._freqArr.length; i++) {
+        play(note._freqArr[i], note._duration, i * interval);
     }
 }
 
 function startPlay(){
     buffer.forEach((note) => {
         playNote(note);
-        wait(interval + note.duration * 500);
+        wait(interval + note._duration * 500);
     });
 }
 
