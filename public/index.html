@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,15 +27,17 @@
             <div class="white-key key note-B"  onmousedown="onNoteClick(11)"></div>
         </div>
         <div class="bpm-display-label">BPM
-            <div class="bpm-display"><input type="text" class="bpm-value" placeholder="0"/></div>
+            <div class="bpm-display"><input type="text" class="bpm-value" placeholder="0" title="Beats Per Minute"/></div>
         </div>
+
         <div class="info">
             <div class="info buttons">
                 <button class="identity-button">Add Identity</button>
                 <button class="retrograde-button">Add Retrograde</button>
                 <button class="pause-button"> Add Pause </button>
                 <div clear="both"></div>
-                <label for="transposition">Transposition: </label><input name="transposition" type="number" />
+                <label for="transposition" title="transposition value">Transposition: </label>
+                <input id="transposition" name="transposition value" type="number" />
                 <button class="transposition-button">Add</button>
                 <div clear="both"></div>
                 <!-- <button class="generate-button">Generate</button> -->
@@ -44,6 +46,7 @@
                 <button class="reset-button">Reset</button>
             </div>
         </div>
+
         <div class="info">
             <h2>Chosen keys</h2>
             <p class="chosen-keys">Click on the piano to start playing</p>
@@ -53,6 +56,7 @@
                 <button class="save-song">Save</button>
                 <button class="load-song">Load</button>
             </div>
+
             <div class="popup-mask"></div>
             <div class="popup save-popup">
                 <div class="popup-header">
@@ -72,6 +76,7 @@
                         </span></button>
                 </div>
             </div>
+
             <div class="popup load-popup">
                 <div class="popup-header">
                     <div class="close-popup">x</div>
@@ -79,7 +84,7 @@
                 </div>
                 <div clear="both"></div>
                 <div class="popup-content">
-                    <label for="songID">Song ID: </label><input name="songID" type="text" />
+                    <label for="songID">Song ID: </label><input id="songID" name="song ID" type="text" />
                     <p class="error-message"></p>
                     <button class="load-button">Load</button>
                 </div>
