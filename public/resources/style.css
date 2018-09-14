@@ -17,7 +17,7 @@ h2{
 }
 button{
     height: 35px;
-    min-width: 120px;
+    width: 120px;
     outline: none;
     margin: 5px;
     cursor: pointer;
@@ -26,13 +26,16 @@ button{
     font-weight: bold;
     box-shadow: 0 3px #999999;
 }
+button[disabled]:hover{
+    opacity: 1;
+    cursor: initial;
+}
 input[name="transposition"]{
     height: 30px;
     line-height: 30px;
-    width: 50px;
+    width: 100px;
     border-radius: 8px;
     text-align: center;
-    /* box-shadow: 0 3px #999999; */
     border-left: 0;
     border-right: 0;
     border-bottom: 1px solid firebrick;
@@ -64,6 +67,9 @@ button.reset-button{
 }
 button.identity-button, button.retrograde-button, button.pause-button, button.transposition-button{
     background-color: #6FC5DD;
+    width: 35px !important;
+    border-radius: 100%;
+    font-size: inherit;
 }
 button.load-button {
     position: absolute;
@@ -278,6 +284,11 @@ footer{
     }
 }
 
+.chosen-keys, .final-set-keys{
+    color: gray;
+    font-style: italic;
+}
+
 .tooltip {
     position: relative;
     display: inline-block;
@@ -320,6 +331,6 @@ footer{
     font-size: x-large;
     color: crimson;
 }
-#transposition{
-    width: 2em;
+.bold{
+    font-weight: bold;
 }

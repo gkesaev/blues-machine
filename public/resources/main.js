@@ -103,6 +103,14 @@ function onNoteClick(noteId){
     }
 }
 
+function disableButtons(flag){
+    document.querySelector('.identity-button').disabled = flag;
+    document.querySelector('.retrograde-button').disabled = flag;
+    document.querySelector('.transposition-button').disabled = flag;
+    document.querySelector('.play-button').disabled = flag;
+    document.querySelector('.save-song').disabled = flag;
+}
+
 function loadNote(noteId){
     let note = notes[noteId];
     if (note._isActive){
@@ -119,6 +127,9 @@ function addToBuffer(note){
     }
     else{
         chosen_keys.innerHTML += ", " + note._displayName;
+        if(buffer.length == 12){
+            disableButtons(false);
+        }
     }
     showBuffer();
 }
@@ -138,6 +149,7 @@ function startPlay(){
 
 function reset(){
     Object.keys(notes).forEach((key) => notes[key].enable());
+    disableButtons(true);
     initialSet.clear();
     buffer = [];
     final_set_keys_element.innerHTML = "Click on the piano to start playing";
@@ -164,28 +176,18 @@ function addRetrograde(){
     showBuffer();
 }
 
-// function changeBPM(){
-//     document.querySelector('.bpm-value').value;
-// }
-
-function showBuffer(){
-    let tempBuff = [];
-    buffer.forEach((note) => tempBuff.push(note._displayName));
-    final_set_keys_element.innerHTML = tempBuff.join(", ");
-}
-
-// function generate(){
-//
-// }
-
 function addTransposition(){
-    let tempBuff = [];
     let byHowMuch = document.querySelector('input[name="transposition"]').value;
+    if(byHowMuch === undefined || byHowMuch === ""){
+        byHowMuch = 0;
+    }
     initialSet.forEach(note => {
-        let newNoteId = (note._noteId + byHowMuch) % 12;
-        tempBuff.push(notes[newNoteId]);
+        let newNoteId = (note._noteId + parseInt(byHowMuch)) % 12;
+        while(newNoteId < 0){
+            newNoteId += 12;
+        }
+        buffer.push(notes[newNoteId]);
     });
-    buffer = buffer.concat(tempBuff);
     showBuffer();
 }
 
@@ -193,6 +195,20 @@ function addPause(){
     buffer.push(notes[12]);
     showBuffer();
 }
+
+// function changeBPM(){
+//     document.querySelector('.bpm-value').value;
+// }
+
+function showBuffer(){
+    let tempBuff = [];
+    buffer.forEach(note => tempBuff.push(note._displayName));
+    final_set_keys_element.innerHTML = tempBuff.join(", ");
+}
+
+// function generate(){
+//
+// }
 
 function storeSequence(){
     if (buffer.length > 0) {
