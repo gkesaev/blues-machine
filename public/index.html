@@ -26,18 +26,21 @@
             <div class="black-key key note-AS" onmousedown="onNoteClick(10)"></div>
             <div class="white-key key note-B"  onmousedown="onNoteClick(11)"></div>
         </div>
-        <div class="bpm-display-label">BPM
-            <div class="bpm-display"><input type="text" class="bpm-value" placeholder="0" title="Beats Per Minute"/></div>
+        <div class="bpm-display-label">
+            <label for="bmp" class="bpm-display-label">BPM</label>
+            <div class="bpm-display">
+                <input type="text" name="beat per minute" class="bpm-value" placeholder="0" id="bmp"/>
+            </div>
         </div>
 
         <div class="info">
             <div class="info buttons">
                 <button class="identity-button">Add Identity</button>
                 <button class="retrograde-button">Add Retrograde</button>
-                <button class="pause-button"> Add Pause </button>
+                <!-- <button class="pause-button"> Add Pause </button> -->
                 <div clear="both"></div>
-                <label for="transposition" title="transposition value">Transposition: </label>
-                <input id="transposition" name="transposition value" type="number" />
+                <label for="transposition" title="transposition value">Transposition:</label>
+                <input id="transposition" name="transposition value" type="number"/>
                 <button class="transposition-button">Add</button>
                 <div clear="both"></div>
                 <!-- <button class="generate-button">Generate</button> -->
@@ -48,9 +51,9 @@
         </div>
 
         <div class="info">
-            <h2>Chosen keys</h2>
+            <h2>Chosen keys:</h2>
             <p class="chosen-keys">Click on the piano to start playing</p>
-            <h2>Final Set</h2>
+            <h2>Final Set:</h2>
             <p class="final-set-keys">Click on the piano to start playing</p>
             <div class="info buttons">
                 <button class="save-song">Save</button>
@@ -84,15 +87,21 @@
                 </div>
                 <div clear="both"></div>
                 <div class="popup-content">
-                    <label for="songID">Song ID: </label><input id="songID" name="song ID" type="text" />
+                    <label for="songID">Song ID: </label><input id="songID" name="songID" type="text" />
                     <p class="error-message"></p>
                     <button class="load-button">Load</button>
                 </div>
             </div>
         </div>
         <div class="info instructions">
-            <h2>instructions</h2>
-            <p>Click on the piano to play</p>
+            <h2>Instructions:</h2>
+            <p>Click on the keyboard to play a note. Each note can only be played once. Once the order of the notes
+                has been chosen, you may play them as is or modify by adding more notes according to rules of:
+                <ul>
+                    <li><a href="https://en.wikipedia.org/wiki/Retrograde_inversion">Identity</a></li>
+                    <li><a href="https://en.wikipedia.org/wiki/Transposition_(music)">Retrograde</a></li>
+                </ul>
+            </p>
         </div>
 
     </div>

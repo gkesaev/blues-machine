@@ -161,7 +161,7 @@ footer{
     display: inline-block;
     position: relative;
     top: 60px;
-    margin-bottom: 20px;
+    margin-bottom: -10px;
     font-weight: bold;
 }
 .bpm-display{
@@ -319,4 +319,7 @@ footer{
     visibility: hidden;
     font-size: x-large;
     color: crimson;
+}
+#transposition{
+    width: 2em;
 }

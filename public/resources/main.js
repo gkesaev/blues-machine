@@ -70,11 +70,11 @@ var buffer = [];
 
 document.querySelector('.play-button').addEventListener("click", startPlay);
 // document.querySelector('.generate-button').addEventListener("mouseup", generate);
+// document.querySelector('.pause-button').addEventListener("click", addPause);
 document.querySelector('.reset-button').addEventListener("click", reset);
 document.querySelector('.identity-button').addEventListener("click", addIdentity);
 document.querySelector('.retrograde-button').addEventListener("click", addRetrograde);
 document.querySelector('.transposition-button').addEventListener("click", addTransposition);
-document.querySelector('.pause-button').addEventListener("click", addPause);
 
 document.querySelector('.bpm-value').addEventListener("change", () => transposition(document.querySelector("input[name=transposition]").value));
 
@@ -219,7 +219,7 @@ function storeSequence(){
 }
 
 function loadSequence() {
-    let load_id =  document.getElementsByName("songID")[0].value;
+    let load_id = document.getElementById("songID").value;
 
     let p = request("GET", "/song/" + load_id);
     p.then(res => {
@@ -227,7 +227,7 @@ function loadSequence() {
             let responseBuffer = res.notes;
             reset();
             chosen_keys.innerHTML = "";
-            var tmpSet = new Set();
+            let tmpSet = new Set();
             responseBuffer.forEach(n => {
                 if (initialSet.size < 12) {
                     initialSet.add(n);
@@ -284,7 +284,7 @@ function request(method, url, data = {}) {
 }
 
 function copyToClipboard() {
-    var textArea = document.createElement("textarea");
+    let textArea = document.createElement("textarea");
     textArea.value = document.querySelector(".saved-song-number").textContent;
     document.body.appendChild(textArea);
     textArea.focus();
