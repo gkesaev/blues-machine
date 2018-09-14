@@ -156,14 +156,6 @@ function countSongsInCollection (req, res){
     })
 }
 
-app.get("/", (req, res) => {
-    console.log(moment().format() + " serve index");
-    res.sendFile(path.join(__dirname + '/index.html'));
-}).get("/index.html", (req, res) => {
-    console.log(moment().format() + " serve index");
-    res.sendFile(path.join(__dirname + '/index.html'));
-});
-
 app.get('/api/moment', logRequest, (req, res) => {
     console.log(moment().format() + " test moment for fun");
     res.send(moment().format());
