@@ -66,9 +66,8 @@ button.identity-button, button.retrograde-button, button.pause-button, button.tr
     background-color: #6FC5DD;
 }
 button.load-button {
-    position: relative;
-    top: 40%;
-    float: right;
+    position: absolute;
+    top: 75%;
     background-color: #273045;
     color: white;
 }
@@ -314,4 +313,10 @@ footer{
 .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+
+.error-message{
+    visibility: hidden;
+    font-size: x-large;
+    color: crimson;
 }
