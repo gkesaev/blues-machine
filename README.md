@@ -2,7 +2,7 @@
 
 Blues machine is an experiment if fusing together [dodecaphonic](https://en.wikipedia.org/wiki/Twelve-tone_technique) (twelve note) technique with blues rules.
 
-The final project should be able to let the user pick the initial order of 12 notes and then according to users choice extend the notes array by appending modifications on initial array according to a set of preconfigured rules such as:
+The final project should be able to let the user pick the initial order of 12 notes and then according to users choice extend the notes array by appending modifications on initial array according to a set of pre-configured rules such as:
 - [retrograde](https://en.wikipedia.org/wiki/Retrograde_inversion)
 - [transposition](https://en.wikipedia.org/wiki/Transposition_(music))
 

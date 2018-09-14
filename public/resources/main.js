@@ -81,6 +81,13 @@ document.querySelector('.bpm-value').addEventListener("change", () => transposit
 document.querySelector('.save-song').addEventListener("click", storeSequence);
 document.querySelector('.load-song').addEventListener("click", showLoadSongPopup);
 document.querySelectorAll('.close-popup').forEach(popup => popup.addEventListener("click", hidePopup));
+document.querySelectorAll('.popup-mask').forEach(mask => mask.addEventListener('click', hidePopup));
+let error_message_element = document.querySelectorAll('.error-message');
+let chosen_keys = document.querySelector('.chosen-keys');
+let clipboard_element = document.getElementById("copyToClipboard");
+let final_set_keys_element = document.querySelector('.final-set-keys');
+clipboard_element.addEventListener("click", copyToClipboard);
+clipboard_element.addEventListener('mouseover', outFunc);
 
 function play(frequency, duration, time) {
     let o = context.createOscillator();
@@ -113,10 +120,10 @@ function addToBuffer(note){
     initialSet.add(note);
     buffer = Array.from(initialSet);
     if(buffer.length == 1){
-        document.querySelector('.chosen-keys').innerHTML = note._displayName;
+        chosen_keys.innerHTML = note._displayName;
     }
     else{
-        document.querySelector('.chosen-keys').innerHTML += ", " + note._displayName;
+        chosen_keys.innerHTML += ", " + note._displayName;
     }
     showBuffer();
 }
@@ -138,8 +145,8 @@ function reset(){
     Object.keys(notes).forEach((key) => notes[key].enable());
     initialSet.clear();
     buffer = [];
-    document.querySelector('.final-set-keys').innerHTML = "Click on the piano to start playing";
-    document.querySelector('.chosen-keys').innerHTML = "Click on the piano to start playing";
+    final_set_keys_element.innerHTML = "Click on the piano to start playing";
+    chosen_keys.innerHTML = "Click on the piano to start playing";
 }
 
 function wait(ms){
@@ -169,7 +176,7 @@ function changeBPM(){
 function showBuffer(){
     let tempBuff = [];
     buffer.forEach((note) => tempBuff.push(note._displayName));
-    document.querySelector('.final-set-keys').innerHTML = tempBuff.join(", ");
+    final_set_keys_element.innerHTML = tempBuff.join(", ");
 }
 
 // function generate(){
@@ -193,43 +200,55 @@ function addPause(){
 }
 
 function storeSequence(){
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            let songId = JSON.parse(xhttp.responseText).song_id;
+    if (buffer.length > 0) {
+        let data = {};
+        data.notes = buffer;
 
-            document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>"
-        }
-     };
-    let n = [];
-    buffer.forEach(note => n.push(note._noteId));
-    let data = {};
-    data.notes = n;
-    let p = request('POST', '/song', data);
-    p.then(res => {
-        console.log("then res: " + JSON.stringify(res));
-        let songId = res;
-        document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>";
-    })
-    .catch(err => console.error("catch err: " + err));
+        let p = request('POST', '/song', data);
+        p.then(res => {
+            let songId = res;
+            document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>";
+            clipboard_element.style.visibility = "visible";
+        })
+        .catch(err => popupError(err));
+    }
+    else {
+        popupError("Cannot save an empty song");
+    }
     showSaveSongPopup();
 }
 
 function loadSequence() {
     let load_id =  document.getElementsByName("songID")[0].value;
-    console.log("loading id: " + load_id);
 
     let p = request("GET", "/song/" + load_id);
     p.then(res => {
-        console.log("then res: " + JSON.stringify(res));
-        console.log("then res: " + res.notes);
-        let responseBuffer = res.notes;
-
-        responseBuffer.forEach(noteId => loadNote(noteId));
-        showBuffer();
-        hidePopup();
+        if (res.errors === undefined || res.errors.length == 0) {
+            let responseBuffer = res.notes;
+            reset();
+            chosen_keys.innerHTML = "";
+            var tmpSet = new Set();
+            responseBuffer.forEach(n => {
+                if (initialSet.size < 12) {
+                    initialSet.add(n);
+                    if (initialSet.size == 1) {
+                        chosen_keys.innerHTML = n._displayName;
+                    }
+                    else {
+                        chosen_keys.innerHTML += ", " + n._displayName;
+                    }
+                }
+                tmpSet.add(n);
+            })
+            buffer = Array.from(tmpSet);
+            showBuffer();
+            hidePopup();
+        }
+        else {
+            throw res.errors;
+        }
     })
-    .catch(err => console.error("catch err: " + err));
+    .catch(err => popupError(err));
 }
 
 function showSaveSongPopup(){
@@ -248,18 +267,43 @@ function hidePopup(){
     document.querySelector('.load-button').removeEventListener("click", loadSequence);
     document.querySelector('.save-popup').style.display="none";
     document.querySelector('.load-popup').style.display="none";
+    clipboard_element.style.visibility = "hidden";
+    error_message_element.forEach(p => p.style.visibility = 'hidden');
 }
 
 function request(method, url, data = {}) {
-    console.log(data);
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.addEventListener('load', e => resolve(JSON.parse(e.target.responseText)));
         xhr.addEventListener('error', e => reject(JSON.parse(e.target.responseText)));
-        console.log("sending: " + JSON.stringify(data) + ", to URL: " + url);
         xhr.open(method, url);
         xhr.setRequestHeader("content-type", "application/json");
         xhr.send(JSON.stringify(data));
+    });
+}
+
+function copyToClipboard() {
+    var textArea = document.createElement("textarea");
+    textArea.value = document.querySelector(".saved-song-number").textContent;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    textArea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textArea);
+    let tooltip = document.getElementById("copyToClipboardTooltip");
+    tooltip.innerHTML = "Copied: " + document.querySelector(".saved-song-number").textContent;
+}
+
+function outFunc() {
+    let tooltip = document.getElementById("copyToClipboardTooltip");
+    tooltip.innerHTML = "Copy to clipboard";
+}
+
+function popupError(err) {
+    error_message_element.forEach(p => {
+        p.textContent = err;
+        p.style.visibility = 'visible'
     });
 }
