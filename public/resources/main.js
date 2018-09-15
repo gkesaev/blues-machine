@@ -3,7 +3,6 @@ if (window.location.hostname === "georgekesaev.github.io") {
 }
 
 var context = new AudioContext();
-// var duration = 1;
 var interval = 2;
 
 class Note{
@@ -120,17 +119,18 @@ function loadNote(noteId){
 }
 
 function addToBuffer(note){
-    initialSet.add(note);
-    buffer = Array.from(initialSet);
-    if(buffer.length == 1){
-        chosen_keys.innerHTML = note._displayName;
-    }
-    else{
-        chosen_keys.innerHTML += ", " + note._displayName;
-        if(buffer.length == 12){
+    buffer.push(note);
+
+    if(initialSet.size < 12){
+        let newNoteToInitialSet = "<div class='one-note-of-initial-set'>" + note._displayName + "</div>";
+        initialSet.add(note);
+        chosen_keys.innerHTML = buffer.length == 1 ? newNoteToInitialSet : chosen_keys.innerHTML + " " + newNoteToInitialSet
+        
+        if(initialSet.size == 12){
             disableButtons(false);
         }
     }
+    
     showBuffer();
 }
 
@@ -237,22 +237,12 @@ function loadSequence() {
         if (res.errors === undefined || res.errors.length == 0) {
             let responseBuffer = res.notes;
             reset();
-            chosen_keys.innerHTML = "";
-            let tmpSet = new Set();
             responseBuffer.forEach(n => {
-                if (initialSet.size < 12) {
+                if (initialSet.size <= 12) {
                     notes[n._noteId].disable();
-                    initialSet.add(notes[n._noteId]);
-                    if (initialSet.size == 1) {
-                        chosen_keys.innerHTML = n._displayName;
-                    }
-                    else {
-                        chosen_keys.innerHTML += ", " + n._displayName;
-                    }
                 }
-                tmpSet.add(notes[n._noteId]);
+                addToBuffer(notes[n._noteId]);
             })
-            buffer = Array.from(tmpSet);
             showBuffer();
             hidePopup();
         }
