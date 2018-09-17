@@ -63,25 +63,20 @@ var initialSet = new Set();
 var buffer = [];
 
 document.querySelector('.play-button').addEventListener("click", startPlay);
-// document.querySelector('.generate-button').addEventListener("mouseup", generate);
-// document.querySelector('.pause-button').addEventListener("click", addPause);
 document.querySelector('.reset-button').addEventListener("click", reset);
 document.querySelector('.identity-button').addEventListener("click", addIdentity);
 document.querySelector('.retrograde-button').addEventListener("click", addRetrograde);
 document.querySelector('.transposition-button').addEventListener("click", addTransposition);
-
-// document.querySelector('.bpm-value').addEventListener("change", () => transposition(document.querySelector("input[name=transposition]").value));
-
 document.querySelector('.save-song').addEventListener("click", storeSequence);
 document.querySelector('.load-song').addEventListener("click", showLoadSongPopup);
 document.querySelectorAll('.close-popup').forEach(popup => popup.addEventListener("click", hidePopup));
 document.querySelectorAll('.popup-mask').forEach(mask => mask.addEventListener('click', hidePopup));
 let error_message_element = document.querySelectorAll('.error-message');
 let chosen_keys = document.querySelector('.chosen-keys');
-let clipboard_element = document.getElementById("copyToClipboard");
+document.querySelector("#copyToClipboard").addEventListener("click", copyToClipboard);
 let final_set_keys_element = document.querySelector('.final-set-keys');
-clipboard_element.addEventListener("click", copyToClipboard);
-clipboard_element.addEventListener('mouseover', outFunc);
+// document.querySelector('.generate-button').addEventListener("mouseup", generate);
+// document.querySelector('.pause-button').addEventListener("click", addPause);
 
 function play(frequency, duration, time) {
     let o = context.createOscillator();
@@ -199,16 +194,16 @@ function addPause(){
 // function changeBPM(){
 //     document.querySelector('.bpm-value').value;
 // }
+//
+// function generate(){
+//
+// }
 
 function showBuffer(){
     let tempBuff = [];
     buffer.forEach(note => tempBuff.push(note._displayName));
     final_set_keys_element.innerHTML = tempBuff.join(", ");
 }
-
-// function generate(){
-//
-// }
 
 function storeSequence(){
     if (buffer.length > 0) {
@@ -219,7 +214,7 @@ function storeSequence(){
         p.then(res => {
             let songId = res;
             document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>";
-            clipboard_element.style.visibility = "visible";
+            document.querySelector("#copyToClipboard").style.display = "initial";
         })
         .catch(err => popupError(err));
     }
@@ -269,7 +264,7 @@ function hidePopup(){
     document.querySelector('.load-button').removeEventListener("click", loadSequence);
     document.querySelector('.save-popup').style.display="none";
     document.querySelector('.load-popup').style.display="none";
-    clipboard_element.style.visibility = "hidden";
+    document.querySelector("#copyToClipboard").style.display = "none";
     error_message_element.forEach(p => p.style.visibility = 'hidden');
 }
 
@@ -291,16 +286,10 @@ function copyToClipboard() {
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-    textArea.select();
     document.execCommand("copy");
     document.body.removeChild(textArea);
     let tooltip = document.getElementById("copyToClipboardTooltip");
     tooltip.innerHTML = "Copied: " + document.querySelector(".saved-song-number").textContent;
-}
-
-function outFunc() {
-    let tooltip = document.getElementById("copyToClipboardTooltip");
-    tooltip.innerHTML = "Copy to clipboard";
 }
 
 function popupError(err) {

@@ -71,11 +71,20 @@ button.identity-button, button.retrograde-button, button.pause-button, button.tr
     border-radius: 100%;
     font-size: inherit;
 }
-button.load-button {
+button.load-button ,button.save-button{
     position: absolute;
-    top: 75%;
+    bottom: 5px;
+    right: 5px;
     background-color: #273045;
     color: white;
+}
+button.copy-button{
+    visibility: hidden;
+    padding-left: 1em;
+    padding-right: 1em;
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 .main-container{
     position: relative;
@@ -114,14 +123,6 @@ footer{
 .info.buttons{
     text-align: center;
     padding: 5px;
-}
-.info.buttons.copy{
-    visibility: hidden;
-    padding-left: 1em;
-    padding-right: 1em;
-    position: absolute;
-    bottom: 0;
-    left: 0;
 }
 .keyboard-сontainer{
     padding: 15px;
@@ -208,7 +209,6 @@ footer{
     text-align: center;
     font-weight: bold;
     opacity: 0.97;
-    display: none;
 }
 .popup-mask{
     height: 100vh;
@@ -221,7 +221,6 @@ footer{
     text-align: center;
     font-weight: bold;
     opacity: 0.97;
-    display: none;
 }
 .popup{
     display: none;
@@ -268,25 +267,10 @@ footer{
     height: 140px;
 }
 
-@media all and (max-width: 650px){
-    .black-key{
-        width: 20px;
-        height: 80px;
-        margin-left: -20px;
-        margin-right: -20px;
-    }
-    .white-key{
-        width: 40px;
-        height: 120px;
-    }
-    .bpm-display-label{
-        top: 0;
-    }
-}
-
 .chosen-keys, .final-set-keys{
     color: gray;
     font-style: italic;
+    text-align: center;
 }
 
 .tooltip {
@@ -347,4 +331,23 @@ footer{
     text-align: center;
     font-weight: bold;
     box-shadow: 2px 2px #999999;
+}
+.hidden{
+    display: none;
+}
+
+@media all and (max-width: 650px){
+    .black-key{
+        width: 20px;
+        height: 80px;
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+    .white-key{
+        width: 40px;
+        height: 120px;
+    }
+    .bpm-display-label{
+        top: 0;
+    }
 }

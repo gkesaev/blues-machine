@@ -12,22 +12,22 @@
 </head>
 <body>
     <header>
-        <h1 class="center">Blues Machine</h1>
+        <h1 class="center">♪ Blues Machine ♪</h1>
     </header>
     <div class="main-container">
         <div class="keyboard-сontainer">
-            <div class="white-key key note-C"  onmousedown="onNoteClick(0)" title="C"></div>
-            <div class="black-key key note-CS" onmousedown="onNoteClick(1)" title="C#"></div>
-            <div class="white-key key note-D"  onmousedown="onNoteClick(2)" title="D"></div>
-            <div class="black-key key note-DS" onmousedown="onNoteClick(3)" title="D#"></div>
-            <div class="white-key key note-E"  onmousedown="onNoteClick(4)" title="E"></div>
-            <div class="white-key key note-F"  onmousedown="onNoteClick(5)" title="F"></div>
-            <div class="black-key key note-FS" onmousedown="onNoteClick(6)" title="F#"></div>
-            <div class="white-key key note-G"  onmousedown="onNoteClick(7)" title="G"></div>
-            <div class="black-key key note-GS" onmousedown="onNoteClick(8)" title="G#"></div>
-            <div class="white-key key note-A"  onmousedown="onNoteClick(9)" title="A"></div>
-            <div class="black-key key note-AS" onmousedown="onNoteClick(10)"title="A#"></div>
-            <div class="white-key key note-B"  onmousedown="onNoteClick(11)"title="B"></div>
+            <div class="white-key key note-C"  onmouseup="onNoteClick(0)" title="C"></div>
+            <div class="black-key key note-CS" onmouseup="onNoteClick(1)" title="C#"></div>
+            <div class="white-key key note-D"  onmouseup="onNoteClick(2)" title="D"></div>
+            <div class="black-key key note-DS" onmouseup="onNoteClick(3)" title="D#"></div>
+            <div class="white-key key note-E"  onmouseup="onNoteClick(4)" title="E"></div>
+            <div class="white-key key note-F"  onmouseup="onNoteClick(5)" title="F"></div>
+            <div class="black-key key note-FS" onmouseup="onNoteClick(6)" title="F#"></div>
+            <div class="white-key key note-G"  onmouseup="onNoteClick(7)" title="G"></div>
+            <div class="black-key key note-GS" onmouseup="onNoteClick(8)" title="G#"></div>
+            <div class="white-key key note-A"  onmouseup="onNoteClick(9)" title="A"></div>
+            <div class="black-key key note-AS" onmouseup="onNoteClick(10)"title="A#"></div>
+            <div class="white-key key note-B"  onmouseup="onNoteClick(11)"title="B"></div>
         </div>
         <!-- <div class="bpm-display-label">
             <label for="bmp" class="bpm-display-label">BPM</label>
@@ -40,23 +40,20 @@
             <h2>Chosen keys</h2>
             <p class="chosen-keys">Click on the piano to start playing</p>
 
-            <div class="popup-mask"></div>
+            <div class="popup-mask hidden"></div>
             <div class="popup save-popup">
                 <div class="popup-header">
                     <div class="close-popup">x</div>
                     <span><strong>Saving the song...</strong></span>
                 </div>
                 <div clear="both"></div>
-
-                <div class="popup-content tooltip">
+                <div class="popup-content">
                     Your song ID is: <span class="saved-song-number">(loading...)</span><br><br>
                     Save this ID to load in the future.
                     <p class="error-message"></p>
-                    <button class="info buttons copy" id="copyToClipboard">
-                        Copy song ID to clipboard
-                        <span class="tooltiptext" id="copyToClipboardTooltip">
-                            Copy to clipboard
-                        </span></button>
+                    <button class="save-button hidden tooltip" id="copyToClipboard">Copy ID
+                        <span class="tooltiptext" id="copyToClipboardTooltip">Copy song ID to clipboard</span>
+                    </button>
                 </div>
             </div>
 
@@ -116,7 +113,6 @@
     <footer>
         (c) 2018 Sergey and George, source <a href="https://github.com/GeorgeKesaev/blues-machine">GitHub</a>
     </footer>
-    <div class="mask">Listen to the music...</div>
 </body>
 <script src="resources/main.js"></script>
 </html>
