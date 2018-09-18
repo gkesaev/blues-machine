@@ -125,12 +125,12 @@ function addToBuffer(note){
         let newNoteToInitialSet = "<div class='one-note-of-initial-set'>" + note._displayName + "</div>";
         initialSet.add(note);
         chosen_keys.innerHTML = buffer.length == 1 ? newNoteToInitialSet : chosen_keys.innerHTML + " " + newNoteToInitialSet
-        
+
         if(initialSet.size == 12){
             disableButtons(false);
         }
     }
-    
+
     showBuffer();
 }
 
@@ -140,11 +140,21 @@ function playNote(note){
     }
 }
 
+const player = (buffer, currentNote) => {
+    playNote(buffer[currentNote]);
+    return new Promise((resolve, reject) =>{
+        resolve();
+        currentNote++;
+    });
+}
 function startPlay(){
+    // old play function
     buffer.forEach((note) => {
         playNote(note);
         wait(interval + note._duration * 500);
     });
+    // new play function
+
 }
 
 function reset(){
