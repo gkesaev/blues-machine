@@ -321,7 +321,7 @@ footer{
 .instructions{
     line-height: 30px;
 }
-.one-note-of-initial-set{
+.one-note-of-initial-set, .one-note-of-final-set{
     display: inline-block;
     width: 30px;
     height: 30px;

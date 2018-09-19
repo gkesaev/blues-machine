@@ -61,33 +61,29 @@ var notes = {
 
 var initialSet = new Set();
 var buffer = [];
+var notesOfFinalSetElements = [];
 
 document.querySelector('.play-button').addEventListener("click", startPlay);
+// document.querySelector('.generate-button').addEventListener("mouseup", generate);
+// document.querySelector('.pause-button').addEventListener("click", addPause);
 document.querySelector('.reset-button').addEventListener("click", reset);
 document.querySelector('.stop-button').addEventListener("click", stopPlay);
 document.querySelector('.identity-button').addEventListener("click", addIdentity);
 document.querySelector('.retrograde-button').addEventListener("click", addRetrograde);
 document.querySelector('.transposition-button').addEventListener("click", addTransposition);
+
+// document.querySelector('.bpm-value').addEventListener("change", () => transposition(document.querySelector("input[name=transposition]").value));
+
 document.querySelector('.save-song').addEventListener("click", storeSequence);
 document.querySelector('.load-song').addEventListener("click", showLoadSongPopup);
 document.querySelectorAll('.close-popup').forEach(popup => popup.addEventListener("click", hidePopup));
 document.querySelectorAll('.popup-mask').forEach(mask => mask.addEventListener('click', hidePopup));
 let error_message_element = document.querySelectorAll('.error-message');
 let chosen_keys = document.querySelector('.chosen-keys');
-document.querySelector("#copyToClipboard").addEventListener("click", copyToClipboard);
+let clipboard_element = document.getElementById("copyToClipboard");
 let final_set_keys_element = document.querySelector('.final-set-keys');
-// document.querySelector('.generate-button').addEventListener("mouseup", generate);
-// document.querySelector('.pause-button').addEventListener("click", addPause);
-
-function play(frequency, duration, time) {
-    let o = context.createOscillator();
-    let g = context.createGain();
-    o.connect(g);
-    g.connect(context.destination);
-    g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + duration + time);
-    o.frequency.value = frequency;
-    o.start(time);
-}
+clipboard_element.addEventListener("click", copyToClipboard);
+clipboard_element.addEventListener('mouseover', outFunc);
 
 function onNoteClick(noteId){
     let note = notes[noteId];
@@ -120,49 +116,64 @@ function addToBuffer(note){
     if(initialSet.size < 12){
         let newNoteToInitialSet = "<div class='one-note-of-initial-set'>" + note._displayName + "</div>";
         initialSet.add(note);
-        chosen_keys.innerHTML = buffer.length == 1 ? newNoteToInitialSet : chosen_keys.innerHTML + " " + newNoteToInitialSet
+        chosen_keys.innerHTML = buffer.length == 1 ? newNoteToInitialSet : chosen_keys.innerHTML + " " + newNoteToInitialSet;
 
         if(initialSet.size == 12){
             disableButtons(false);
+            showBuffer();
         }
     }
+}
 
-    showBuffer();
+function play(frequency, duration, time) {
+    let o = context.createOscillator();
+    let g = context.createGain();
+    o.connect(g);
+    g.connect(context.destination);
+    g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + duration + time);
+    o.frequency.value = frequency;
+    o.start(time);
 }
 
 function playNote(note) {
-    for (let i = 0; i < note._freqArr.length; i++) {
-        play(note._freqArr[i], note._duration, i * interval);
-    }
-}
-
-const player = (buffer, currentNote) => {
-    playNote(buffer[currentNote]);
     return new Promise((resolve, reject) =>{
-        resolve();
-        currentNote++;
+        for (let i = 0; i < note._freqArr.length; i++) {
+            play(note._freqArr[i], note._duration, i * interval);
+        }
     });
-}
-
-var counter = 0;
-function startPlay() {
-    counter = 0;
-    playing();
 }
 
 function playing() {
     counter++;
     if (counter < buffer.length){
-        playNote(buffer[counter]);
-        setTimeout(playing, interval + buffer[counter]._duration * 500);
+        console.log("counter " + counter);
+        notesOfFinalSetElements[counter].style.color = 'red';
+        notesOfFinalSetElements[counter].style.width = '35px';
+        notesOfFinalSetElements[counter].style.height = '35px';
+        playNote(buffer[counter]);//.then(() => {
+        setTimeout(() => {
+            let c = counter;
+            notesOfFinalSetElements[c].style.color = '';
+            notesOfFinalSetElements[c].style.width = '';
+            notesOfFinalSetElements[c].style.height = '';
+            playing();
+        }, interval + buffer[counter]._duration * 500);
+        // });
+        // setTimeout(playing, interval + buffer[counter]._duration * 500);
     }
     else {
         counter = 0;
     }
 }
 
+var counter = -1;
+function startPlay() {
+    counter = -1;
+    playing();
+}
+
 function stopPlay() {
-    counter = buffer.length + 1;
+    counter = buffer.length;
 }
 
 function reset(){
@@ -174,6 +185,7 @@ function reset(){
     chosen_keys.innerHTML = "Click on the piano to start playing";
 }
 
+// TODO: check not needed anymore
 function wait(ms){
     let start = new Date();
     let stop = start;
@@ -217,16 +229,20 @@ function addPause(){
 // function changeBPM(){
 //     document.querySelector('.bpm-value').value;
 // }
-//
+
+function showBuffer(){
+    final_set_keys_element.innerHTML = "";
+    let newFinalNote = "";
+    buffer.forEach(note => {
+        newFinalNote = "<div class='one-note-of-final-set'>" + note._displayName + "</div>";
+        final_set_keys_element.innerHTML = final_set_keys_element.innerHTML + " " + newFinalNote;
+    });
+    notesOfFinalSetElements = document.querySelectorAll('.one-note-of-final-set');
+}
+
 // function generate(){
 //
 // }
-
-function showBuffer(){
-    let tempBuff = [];
-    buffer.forEach(note => tempBuff.push(note._displayName));
-    final_set_keys_element.innerHTML = tempBuff.join(", ");
-}
 
 function storeSequence(){
     if (buffer.length > 0) {
@@ -237,7 +253,7 @@ function storeSequence(){
         p.then(res => {
             let songId = res;
             document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>";
-            document.querySelector("#copyToClipboard").style.display = "initial";
+            clipboard_element.style.visibility = "visible";
         })
         .catch(err => popupError(err));
     }
@@ -287,7 +303,7 @@ function hidePopup(){
     document.querySelector('.load-button').removeEventListener("click", loadSequence);
     document.querySelector('.save-popup').style.display="none";
     document.querySelector('.load-popup').style.display="none";
-    document.querySelector("#copyToClipboard").style.display = "none";
+    clipboard_element.style.visibility = "hidden";
     error_message_element.forEach(p => p.style.visibility = 'hidden');
 }
 
@@ -309,10 +325,16 @@ function copyToClipboard() {
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
+    textArea.select();
     document.execCommand("copy");
     document.body.removeChild(textArea);
     let tooltip = document.getElementById("copyToClipboardTooltip");
     tooltip.innerHTML = "Copied: " + document.querySelector(".saved-song-number").textContent;
+}
+
+function outFunc() {
+    let tooltip = document.getElementById("copyToClipboardTooltip");
+    tooltip.innerHTML = "Copy to clipboard";
 }
 
 function popupError(err) {
