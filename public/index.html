@@ -29,15 +29,9 @@
             <div class="black-key key note-AS" onmouseup="onNoteClick(10)"title="A#"></div>
             <div class="white-key key note-B"  onmouseup="onNoteClick(11)"title="B"></div>
         </div>
-        <!-- <div class="bpm-display-label">
-            <label for="bmp" class="bpm-display-label">BPM</label>
-            <div class="bpm-display">
-                <input type="text" name="beat per minute" class="bpm-value" placeholder="0" id="bmp"/>
-            </div>
-        </div> -->
 
         <div class="info">
-            <h2>Chosen keys</h2>
+            <h2>Initial set of chosen keys</h2>
             <p class="chosen-keys">Click on the piano to start playing</p>
 
             <div class="popup-mask hidden"></div>
@@ -48,8 +42,8 @@
                 </div>
                 <div clear="both"></div>
                 <div class="popup-content">
-                    Your song ID is: <span class="saved-song-number">(loading...)</span><br><br>
-                    Save this ID to load in the future.
+                    <p>Your song ID is: <span class="saved-song-number">(loading...)</span></p>
+                    <p>Save this ID to load in the future.</p>
                     <p class="error-message"></p>
                     <button class="save-button tooltip" id="copyToClipboard">Copy ID
                         <span class="tooltiptext" id="copyToClipboardTooltip">Copy song ID to clipboard</span>
@@ -72,36 +66,36 @@
         </div>
 
         <div class="info">
-
-                <button class="identity-button" disabled>+</button><span class="bold"> Identity</span>
-                <div clear="both"></div>
-                <button class="retrograde-button" disabled>+</button><span class="bold"> Retrograde</span>
-                <!-- <button class="pause-button" disabled> Add Pause </button> -->
-                <div clear="both"></div>
-                <button class="transposition-button" disabled>+</button>
-                <label for="transposition" title="transposition value">Transposition:</label>
-                <input id="transposition" name="transposition" type="number" value="0"/>
-                <div clear="both"></div>
-                <hr/>
-                <h2>Final Set</h2>
-                <p class="final-set-keys">Click on the piano to start playing</p>
-                <div class="info buttons">
-                    <!-- <button class="generate-button">Generate</button> -->
-                    <button class="play-button" disabled>Play</button>
-                    <button class="reset-button">Reset</button>
-                    <button class="stop-button">Stop</button>
-                </div>
-                <div class="info buttons">
-                    <button class="save-song" disabled>Save</button>
-                    <button class="load-song">Load</button>
-                </div>
+            <h2>Edit options</h2>
+            <p>Availible only when all the keys are chosen</p>
+            <button class="identity-button" disabled>+</button><span class="bold"> Identity</span>
+            <div clear="both"></div>
+            <button class="retrograde-button" disabled>+</button><span class="bold"> Retrograde</span>
+            <div clear="both"></div>
+            <button class="transposition-button" disabled>+</button>
+            <label for="transposition" title="transposition value">Transposition:</label>
+            <input id="transposition" name="transposition" type="number" value="0"/>
+            <div clear="both"></div>
+            <hr/>
+            <h2>Final set</h2>
+            <p class="final-set-keys">Complete your initial set and then use the options above</p>
+            <div class="info buttons">
+                <button class="play-button" disabled>Play</button>
+                <button class="pause-button" disabled> Pause </button>
+                <button class="stop-button">Stop</button>
+            </div>
+            <div class="info buttons">
+                <button class="save-song" disabled>Save</button>
+                <button class="load-song">Load</button>
+                <button class="reset-button">Reset</button>
+            </div>
         </div>
 
         <div class="info instructions">
             <h2>Instructions</h2>
-            <p>Click on the keyboard to play a note.
-                <br>Each note can only be played once.
-                <br>Once the order of the notes has been chosen, you may play them as is or modify by adding more notes according to rules of:
+            <p>Click on the keyboard to play a note.</p>
+            <p>Each note can only be played once.</p>
+            <p>Once the order of the notes has been chosen, you may play them as is or modify by adding more notes according to rules of:
                 <ul>
                     <li>Identity</li>
                     <li><a href="https://en.wikipedia.org/wiki/Retrograde_inversion">Retrograde</a></li>

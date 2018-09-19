@@ -59,13 +59,20 @@ button:active{
 button.play-button{
     background-color: #c0d857;
 }
-button.generate-button{
+button.pause-button{
     background-color: #E8AC51;
+}
+button.stop-button{
+    background-color: #ff3b44;
 }
 button.reset-button{
     background-color: #FF656C;
 }
-button.identity-button, button.retrograde-button, button.pause-button, button.transposition-button{
+button.save-song{
+    background-color: #a0dafb;
+}
+
+button.identity-button, button.retrograde-button, button.transposition-button{
     background-color: #6FC5DD;
     width: 35px !important;
     border-radius: 100%;
@@ -163,40 +170,12 @@ footer{
 .white-key:active{
     background-color: whitesmoke;
 }
-.bpm-display-label{
-    width: 50px;
-    height: 30px;
-    display: inline-block;
-    position: relative;
-    top: 60px;
-    margin-bottom: -10px;
-    font-weight: bold;
-}
-.bpm-display{
-    width: 50px;
-    height: 50px;
-    line-height: 50px;
-    background-color: #273045;
-    display: inline-block;
-    position: relative;
-    margin-bottom: 20px;
-    border-radius: 100%;
-}
 .disabled-key{
     background-image: url("./images/bg.png");
     cursor: initial;
 }
 .disabled-key:active{
     background-color: #999999;
-}
-.bpm-value{
-    width: 35px;
-    height: 25px;
-    border: 0;
-    border-radius: 50%;
-    background-color: #aaaaaa;
-    text-align: center;
-    outline: none;
 }
 .mask{
     height: 100vh;
@@ -319,9 +298,6 @@ footer{
 .bold{
     font-weight: bold;
 }
-.instructions{
-    line-height: 30px;
-}
 .one-note-of-initial-set, .one-note-of-final-set{
     display: inline-block;
     width: 30px;
@@ -332,6 +308,7 @@ footer{
     text-align: center;
     font-weight: bold;
     box-shadow: 2px 2px #999999;
+    margin-bottom: 5px;
 }
 .hidden{
     display: none;
@@ -347,8 +324,5 @@ footer{
     .white-key{
         width: 40px;
         height: 120px;
-    }
-    .bpm-display-label{
-        top: 0;
     }
 }

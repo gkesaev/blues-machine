@@ -14,6 +14,9 @@ window.onload = () => {
 };
 var context = new AudioContext();
 var interval = 2;
+var isPaused = false;
+var keepPlaying = false;
+var playedNote = -1;
 
 class Note {
     constructor(noteId, name, displayName, freqArr, duration = 1) {
@@ -74,20 +77,17 @@ var buffer = [];
 var notesOfFinalSetElements = [];
 
 document.querySelector('.play-button').addEventListener("click", startPlay);
-// document.querySelector('.generate-button').addEventListener("mouseup", generate);
-// document.querySelector('.pause-button').addEventListener("click", addPause);
+document.querySelector('.pause-button').addEventListener("click", pausePlay);
 document.querySelector('.reset-button').addEventListener("click", reset);
 document.querySelector('.stop-button').addEventListener("click", stopPlay);
 document.querySelector('.identity-button').addEventListener("click", addIdentity);
 document.querySelector('.retrograde-button').addEventListener("click", addRetrograde);
 document.querySelector('.transposition-button').addEventListener("click", addTransposition);
-
-// document.querySelector('.bpm-value').addEventListener("change", () => transposition(document.querySelector("input[name=transposition]").value));
-
 document.querySelector('.save-song').addEventListener("click", storeSequence);
 document.querySelector('.load-song').addEventListener("click", showLoadSongPopup);
 document.querySelectorAll('.close-popup').forEach(popup => popup.addEventListener("click", hidePopup));
 document.querySelectorAll('.popup-mask').forEach(mask => mask.addEventListener('click', hidePopup));
+
 let error_message_element = document.querySelectorAll('.error-message');
 let chosen_keys = document.querySelector('.chosen-keys');
 let clipboard_element = document.getElementById("copyToClipboard");
@@ -109,6 +109,7 @@ function disableButtons(flag) {
     document.querySelector('.retrograde-button').disabled = flag;
     document.querySelector('.transposition-button').disabled = flag;
     document.querySelector('.play-button').disabled = flag;
+    document.querySelector('.pause-button').disabled = flag;
     document.querySelector('.save-song').disabled = flag;
 }
 
@@ -153,57 +154,81 @@ function playNote(note) {
     });
 }
 
-function playing() {
-    counter++;
-    if (-1 < counter && counter < buffer.length) {
-        console.log("counter " + counter);
-        notesOfFinalSetElements[counter].style.color = 'red';
-        notesOfFinalSetElements[counter].style.width = '35px';
-        notesOfFinalSetElements[counter].style.height = '35px';
-        playNote(buffer[counter]);
-        setTimeout(() => {
-            let c = counter;
-            if (-1 < c && c < buffer.length){
-                notesOfFinalSetElements[c].style.color = '';
-                notesOfFinalSetElements[c].style.width = '';
-                notesOfFinalSetElements[c].style.height = '';
-                playing();
-            }
-        }, interval + buffer[counter]._duration * 500);
+function markPlayedNote(){
+    notesOfFinalSetElements[playedNote].style.backgroundColor = '#c0d857';
+    notesOfFinalSetElements[playedNote].style.color = 'white';
+    notesOfFinalSetElements[playedNote].style.width = '35px';
+    notesOfFinalSetElements[playedNote].style.height = '35px';
+    notesOfFinalSetElements[playedNote].style.lineHeight = '35px';
+}
+
+function unMarkPlayedNotes(noteIndex){
+    if(noteIndex === undefined){
+        notesOfFinalSetElements.forEach(elem => {
+            elem.style.backgroundColor = '';
+            elem.style.color = '';
+            elem.style.width = '';
+            elem.style.height = '';
+            elem.style.lineHeight = '';
+        });
+    }
+    else{
+        notesOfFinalSetElements[noteIndex].style.backgroundColor = '';
+        notesOfFinalSetElements[noteIndex].style.color = '';
+        notesOfFinalSetElements[noteIndex].style.width = '';
+        notesOfFinalSetElements[noteIndex].style.height = '';
+        notesOfFinalSetElements[noteIndex].style.lineHeight = '';
     }
 }
 
-var counter = -1;
+function playing() {
+    if (playedNote >= -1 && playedNote < buffer.length && keepPlaying)  {
+        playedNote++;
+        markPlayedNote();
+        playNote(buffer[playedNote]);
+        setTimeout(() => {
+            let c = playedNote;
+            if (-1 < c && c < buffer.length && !isPaused){
+                unMarkPlayedNotes(c);
+                playing();
+            }
+        }, interval + buffer[playedNote]._duration * 500);
+    }
+}
+
 function startPlay() {
-    counter = -1;
+    if(isPaused == false){
+        
+    }
+    else{
+        unMarkPlayedNotes();
+        isPaused = false;
+    }
+    keepPlaying = true;
     playing();
 }
 
 function stopPlay() {
-    counter = buffer.length;
-    notesOfFinalSetElements.forEach(elem => {
-        elem.style.color = '';
-        elem.style.width = '';
-        elem.style.height = '';
-    });
+    keepPlaying = false;
+    isPaused = false;
+    unMarkPlayedNotes();
+    playedNote = -1;
+}
+
+function pausePlay(){
+    keepPlaying = false;
+    isPaused = true;
 }
 
 function reset() {
+    stopPlay();
+    document.querySelector('.play-button').addEventListener("click", startPlay);
     Object.keys(notes).forEach((key) => notes[key].enable());
     disableButtons(true);
     initialSet.clear();
     buffer = [];
-    final_set_keys_element.innerHTML = "Click on the piano to start playing";
+    final_set_keys_element.innerHTML = "Complete your initial set and then use the options above";
     chosen_keys.innerHTML = "Click on the piano to start playing";
-}
-
-// TODO: check not needed anymore
-function wait(ms) {
-    let start = new Date();
-    let stop = start;
-    while (stop - start < ms) {
-        stop = new Date();
-    }
 }
 
 function addIdentity() {
@@ -238,10 +263,6 @@ function addPause() {
     showBuffer();
 }
 
-// function changeBPM(){
-//     document.querySelector('.bpm-value').value;
-// }
-
 function showBuffer() {
     final_set_keys_element.innerHTML = "";
     let newFinalNote = "";
@@ -251,10 +272,6 @@ function showBuffer() {
     });
     notesOfFinalSetElements = document.querySelectorAll('.one-note-of-final-set');
 }
-
-// function generate(){
-//
-// }
 
 function storeSequence() {
     if (buffer.length > 0) {
