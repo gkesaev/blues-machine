@@ -193,19 +193,22 @@ function playing() {
                 playing();
             }
         }, interval + buffer[playedNote]._duration * 500);
+
+        if (playedNote == buffer.length - 1){
+            stopPlay();
+        }
     }
 }
 
 function startPlay() {
-    if(isPaused == false){
-        
-    }
-    else{
+    if(isPaused){
         unMarkPlayedNotes();
         isPaused = false;
     }
-    keepPlaying = true;
-    playing();
+    if(!keepPlaying){
+        keepPlaying = true;
+        playing();
+    }
 }
 
 function stopPlay() {
