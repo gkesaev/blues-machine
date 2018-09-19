@@ -302,6 +302,7 @@ function loadSequence() {
 function showSaveSongPopup() {
     document.querySelector('.popup-mask').style.display = "initial";
     document.querySelector('.save-popup').style.display = "initial";
+    clipboard_element.style.visibility = "visible";
 }
 
 function showLoadSongPopup() {

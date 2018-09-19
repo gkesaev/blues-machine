@@ -72,6 +72,7 @@ button.identity-button, button.retrograde-button, button.pause-button, button.tr
     font-size: inherit;
 }
 button.load-button ,button.save-button{
+    visibility: hidden;
     position: absolute;
     bottom: 5px;
     right: 5px;
