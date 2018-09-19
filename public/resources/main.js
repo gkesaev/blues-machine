@@ -64,6 +64,7 @@ var buffer = [];
 
 document.querySelector('.play-button').addEventListener("click", startPlay);
 document.querySelector('.reset-button').addEventListener("click", reset);
+document.querySelector('.stop-button').addEventListener("click", stopPlay);
 document.querySelector('.identity-button').addEventListener("click", addIdentity);
 document.querySelector('.retrograde-button').addEventListener("click", addRetrograde);
 document.querySelector('.transposition-button').addEventListener("click", addTransposition);
@@ -120,26 +121,48 @@ function addToBuffer(note){
         let newNoteToInitialSet = "<div class='one-note-of-initial-set'>" + note._displayName + "</div>";
         initialSet.add(note);
         chosen_keys.innerHTML = buffer.length == 1 ? newNoteToInitialSet : chosen_keys.innerHTML + " " + newNoteToInitialSet
-        
+
         if(initialSet.size == 12){
             disableButtons(false);
         }
     }
-    
+
     showBuffer();
 }
 
-function playNote(note){
+function playNote(note) {
     for (let i = 0; i < note._freqArr.length; i++) {
         play(note._freqArr[i], note._duration, i * interval);
     }
 }
 
-function startPlay(){
-    buffer.forEach((note) => {
-        playNote(note);
-        wait(interval + note._duration * 500);
+const player = (buffer, currentNote) => {
+    playNote(buffer[currentNote]);
+    return new Promise((resolve, reject) =>{
+        resolve();
+        currentNote++;
     });
+}
+
+var counter = 0;
+function startPlay() {
+    counter = 0;
+    playing();
+}
+
+function playing() {
+    counter++;
+    if (counter < buffer.length){
+        playNote(buffer[counter]);
+        setTimeout(playing, interval + buffer[counter]._duration * 500);
+    }
+    else {
+        counter = 0;
+    }
+}
+
+function stopPlay() {
+    counter = buffer.length + 1;
 }
 
 function reset(){
