@@ -2,6 +2,16 @@ if (window.location.hostname === "georgekesaev.github.io") {
     window.location.href = "https://blues-machine.herokuapp.com/";
 }
 
+window.onload = () => {
+    let isChrome = !!window.chrome && !!window.chrome.webstore;
+    if (!isChrome){
+        let elem = document.querySelector('header');
+        let node = document.createElement('H4');
+        node.innerText = "For best experience please use Google Chrome.";
+        node.style.color = 'black';
+        elem.appendChild(node);
+    }
+};
 var context = new AudioContext();
 var interval = 2;
 
