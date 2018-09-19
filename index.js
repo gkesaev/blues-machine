@@ -2,6 +2,7 @@
 
 const path = require('path');
 const PORT = process.env.PORT || 8000;
+const max_notes = 1000;
 
 let moment = require('moment');
 let logRequest = require('log-request');
@@ -51,22 +52,40 @@ function storeSong(req, res) {
         console.log("Connected correctly to Mongo server");
         const dbo = db.db("blues-notes");
         let song = req.body;
-        const collection = dbo.collection("notes");
-        collection.insertOne(song, function (err, result) {
-            if (err) {
-                console.error(err);
-                res.statusCode = 500;
-                return res.json({
-                    errors: ['Failed to save a song']
-                })
+        if ('notes' in song) {
+            if (song.notes.length <= max_notes) {
+                const collection = dbo.collection("notes");
+                collection.insertOne(song, function (err, result) {
+                    if (err) {
+                        console.error(err);
+                        res.statusCode = 500;
+                        return res.json({
+                            errors: ['Failed to save a song']
+                        })
+                    }
+                    res.setHeader('Content-Type', 'application/json');
+                    res.statusCode = 201;
+                    let saved_song_id = result.ops[0]._id;
+                    console.log("one song inserted into db, song id: " + saved_song_id);
+                    res.json(saved_song_id);
+                    db.close();
+                });
             }
-            res.setHeader('Content-Type', 'application/json');
-            res.statusCode = 201;
-            let saved_song_id = result.ops[0]._id;
-            console.log("one song inserted into db, song id: " + saved_song_id);
-            res.json(saved_song_id);
-            db.close();
-        });
+            else {
+                badSaveObject(res, 'Notes array is limited to ' + max_notes + ' notes');
+            }
+        }
+        else {
+            badSaveObject(res, 'Wrong object.');
+        }
+    });
+}
+
+function badSaveObject(res, err) {
+    console.error(err);
+    res.statusCode = 406;
+    return res.json({
+        errors: [err]
     });
 }
 
