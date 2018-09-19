@@ -66,6 +66,7 @@ document.querySelector('.play-button').addEventListener("click", startPlay);
 // document.querySelector('.generate-button').addEventListener("mouseup", generate);
 // document.querySelector('.pause-button').addEventListener("click", addPause);
 document.querySelector('.reset-button').addEventListener("click", reset);
+document.querySelector('.stop-button').addEventListener("click", stopPlay);
 document.querySelector('.identity-button').addEventListener("click", addIdentity);
 document.querySelector('.retrograde-button').addEventListener("click", addRetrograde);
 document.querySelector('.transposition-button').addEventListener("click", addTransposition);
@@ -134,7 +135,7 @@ function addToBuffer(note){
     showBuffer();
 }
 
-function playNote(note){
+function playNote(note) {
     for (let i = 0; i < note._freqArr.length; i++) {
         play(note._freqArr[i], note._duration, i * interval);
     }
@@ -147,14 +148,26 @@ const player = (buffer, currentNote) => {
         currentNote++;
     });
 }
-function startPlay(){
-    // old play function
-    buffer.forEach((note) => {
-        playNote(note);
-        wait(interval + note._duration * 500);
-    });
-    // new play function
 
+var counter = 0;
+function startPlay() {
+    counter = 0;
+    playing();
+}
+
+function playing() {
+    counter++;
+    if (counter < buffer.length){
+        playNote(buffer[counter]);
+        setTimeout(playing, interval + buffer[counter]._duration * 500);
+    }
+    else {
+        counter = 0;
+    }
+}
+
+function stopPlay() {
+    counter = buffer.length + 1;
 }
 
 function reset(){
