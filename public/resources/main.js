@@ -5,8 +5,8 @@ if (window.location.hostname === "georgekesaev.github.io") {
 var context = new AudioContext();
 var interval = 2;
 
-class Note{
-    constructor(noteId, name, displayName, freqArr, duration = 1){
+class Note {
+    constructor(noteId, name, displayName, freqArr, duration = 1) {
         this._noteId = noteId;
         this._name = name;
         this._displayName = displayName;
@@ -14,49 +14,49 @@ class Note{
         this._duration = duration;
         this._isActive = true;
     }
-    set name(noteId){ this._noteId = noteId;}
-    get name(){ return this._noteId;}
-    set name(name){ this._name = name;}
-    get name(){ return this._name;}
-    set name(displayName){ this._displayName = displayName;}
-    get name(){ return this._displayName;}
-    set duration(duration){ this._duration = duration;}
-    get duration(){ return this._duration;}
-    set freqArr(freqArr){ this._freqArr = freqArr;}
-    get freqArr(){ return this._freqArr;}
-    set isActive(isActive){ this._isActive = isActive;}
-    get isActive(){ return this._isActive;}
+    set name(noteId) { this._noteId = noteId; }
+    get name() { return this._noteId; }
+    set name(name) { this._name = name; }
+    get name() { return this._name; }
+    set name(displayName) { this._displayName = displayName; }
+    get name() { return this._displayName; }
+    set duration(duration) { this._duration = duration; }
+    get duration() { return this._duration; }
+    set freqArr(freqArr) { this._freqArr = freqArr; }
+    get freqArr() { return this._freqArr; }
+    set isActive(isActive) { this._isActive = isActive; }
+    get isActive() { return this._isActive; }
 
-    enable(){
+    enable() {
         this._isActive = true;
         let el = document.querySelector('.note-' + this._name);
-        if (el){
+        if (el) {
             el.classList.remove('disabled-key');
         }
     }
-    disable(){
+    disable() {
         this._isActive = false;
         let el = document.querySelector('.note-' + this._name);
-        if (el){
+        if (el) {
             el.classList.add('disabled-key');
         }
     }
 }
 
 var notes = {
-    0 : new Note(0 , "C" , "C" , [261.6, 523.3, 261.6]),
-    1 : new Note(1 , "CS", "C#", [277.2, 554.4, 277.2]),
-    2 : new Note(2 , "D" , "D" , [293.7, 587.3, 293.7]),
-    3 : new Note(3 , "DS", "D#", [311.1, 622.3, 311.1]),
-    4 : new Note(4 , "E" , "E" , [329.6, 659.3]),
-    5 : new Note(5 , "F" , "F" , [349.2, 698.5]),
-    6 : new Note(6 , "FS", "F#", [370, 740]),
-    7 : new Note(7 , "G" , "G" , [392, 784]),
-    8 : new Note(8 , "GS", "G#", [415.3, 830.6]),
-    9 : new Note(9 , "A" , "A" , [440, 880]),
+    0: new Note(0, "C", "C", [261.6, 523.3, 261.6]),
+    1: new Note(1, "CS", "C#", [277.2, 554.4, 277.2]),
+    2: new Note(2, "D", "D", [293.7, 587.3, 293.7]),
+    3: new Note(3, "DS", "D#", [311.1, 622.3, 311.1]),
+    4: new Note(4, "E", "E", [329.6, 659.3]),
+    5: new Note(5, "F", "F", [349.2, 698.5]),
+    6: new Note(6, "FS", "F#", [370, 740]),
+    7: new Note(7, "G", "G", [392, 784]),
+    8: new Note(8, "GS", "G#", [415.3, 830.6]),
+    9: new Note(9, "A", "A", [440, 880]),
     10: new Note(10, "AS", "A#", [466.2, 932.3]),
-    11: new Note(11, "B" , "B" , [493.9, 987.8]),
-    12: new Note(12, "-" , "-" , [0])
+    11: new Note(11, "B", "B", [493.9, 987.8]),
+    12: new Note(12, "-", "-", [0])
 } // due to the table: https://www.seventhstring.com/resources/notefrequencies.html
 
 var initialSet = new Set();
@@ -85,16 +85,16 @@ let final_set_keys_element = document.querySelector('.final-set-keys');
 clipboard_element.addEventListener("click", copyToClipboard);
 clipboard_element.addEventListener('mouseover', outFunc);
 
-function onNoteClick(noteId){
+function onNoteClick(noteId) {
     let note = notes[noteId];
-    if (note._isActive){
+    if (note._isActive) {
         note.disable();
         addToBuffer(note);
         playNote(note);
     }
 }
 
-function disableButtons(flag){
+function disableButtons(flag) {
     document.querySelector('.identity-button').disabled = flag;
     document.querySelector('.retrograde-button').disabled = flag;
     document.querySelector('.transposition-button').disabled = flag;
@@ -102,23 +102,23 @@ function disableButtons(flag){
     document.querySelector('.save-song').disabled = flag;
 }
 
-function loadNote(noteId){
+function loadNote(noteId) {
     let note = notes[noteId];
-    if (note._isActive){
+    if (note._isActive) {
         note.disable();
         addToBuffer(note);
     }
 }
 
-function addToBuffer(note){
+function addToBuffer(note) {
     buffer.push(note);
 
-    if(initialSet.size < 12){
+    if (initialSet.size < 12) {
         let newNoteToInitialSet = "<div class='one-note-of-initial-set'>" + note._displayName + "</div>";
         initialSet.add(note);
         chosen_keys.innerHTML = buffer.length == 1 ? newNoteToInitialSet : chosen_keys.innerHTML + " " + newNoteToInitialSet;
 
-        if(initialSet.size == 12){
+        if (initialSet.size == 12) {
             disableButtons(false);
             showBuffer();
         }
@@ -136,7 +136,7 @@ function play(frequency, duration, time) {
 }
 
 function playNote(note) {
-    return new Promise((resolve, reject) =>{
+    return new Promise((resolve, reject) => {
         for (let i = 0; i < note._freqArr.length; i++) {
             play(note._freqArr[i], note._duration, i * interval);
         }
@@ -145,24 +145,21 @@ function playNote(note) {
 
 function playing() {
     counter++;
-    if (counter < buffer.length){
+    if (-1 < counter && counter < buffer.length) {
         console.log("counter " + counter);
         notesOfFinalSetElements[counter].style.color = 'red';
         notesOfFinalSetElements[counter].style.width = '35px';
         notesOfFinalSetElements[counter].style.height = '35px';
-        playNote(buffer[counter]);//.then(() => {
+        playNote(buffer[counter]);
         setTimeout(() => {
             let c = counter;
-            notesOfFinalSetElements[c].style.color = '';
-            notesOfFinalSetElements[c].style.width = '';
-            notesOfFinalSetElements[c].style.height = '';
-            playing();
+            if (-1 < c && c < buffer.length){
+                notesOfFinalSetElements[c].style.color = '';
+                notesOfFinalSetElements[c].style.width = '';
+                notesOfFinalSetElements[c].style.height = '';
+                playing();
+            }
         }, interval + buffer[counter]._duration * 500);
-        // });
-        // setTimeout(playing, interval + buffer[counter]._duration * 500);
-    }
-    else {
-        counter = 0;
     }
 }
 
@@ -174,9 +171,14 @@ function startPlay() {
 
 function stopPlay() {
     counter = buffer.length;
+    notesOfFinalSetElements.forEach(elem => {
+        elem.style.color = '';
+        elem.style.width = '';
+        elem.style.height = '';
+    });
 }
 
-function reset(){
+function reset() {
     Object.keys(notes).forEach((key) => notes[key].enable());
     disableButtons(true);
     initialSet.clear();
@@ -186,34 +188,34 @@ function reset(){
 }
 
 // TODO: check not needed anymore
-function wait(ms){
+function wait(ms) {
     let start = new Date();
     let stop = start;
-    while(stop - start < ms){
+    while (stop - start < ms) {
         stop = new Date();
     }
 }
 
-function addIdentity(){
+function addIdentity() {
     let tempBuff = Array.from(initialSet);;
     buffer = buffer.concat(tempBuff);
     showBuffer();
 }
 
-function addRetrograde(){
+function addRetrograde() {
     let tempBuff = Array.from(initialSet);;
     buffer = buffer.concat(tempBuff.reverse());
     showBuffer();
 }
 
-function addTransposition(){
+function addTransposition() {
     let byHowMuch = document.querySelector('input[name="transposition"]').value;
-    if(byHowMuch === undefined || byHowMuch === ""){
+    if (byHowMuch === undefined || byHowMuch === "") {
         byHowMuch = 0;
     }
     initialSet.forEach(note => {
         let newNoteId = (note._noteId + parseInt(byHowMuch)) % 12;
-        while(newNoteId < 0){
+        while (newNoteId < 0) {
             newNoteId += 12;
         }
         buffer.push(notes[newNoteId]);
@@ -221,7 +223,7 @@ function addTransposition(){
     showBuffer();
 }
 
-function addPause(){
+function addPause() {
     buffer.push(notes[12]);
     showBuffer();
 }
@@ -230,7 +232,7 @@ function addPause(){
 //     document.querySelector('.bpm-value').value;
 // }
 
-function showBuffer(){
+function showBuffer() {
     final_set_keys_element.innerHTML = "";
     let newFinalNote = "";
     buffer.forEach(note => {
@@ -244,7 +246,7 @@ function showBuffer(){
 //
 // }
 
-function storeSequence(){
+function storeSequence() {
     if (buffer.length > 0) {
         let data = {};
         data.notes = buffer;
@@ -255,7 +257,7 @@ function storeSequence(){
             document.querySelector(".saved-song-number").innerHTML = "<strong>" + songId + "</strong>";
             clipboard_element.style.visibility = "visible";
         })
-        .catch(err => popupError(err));
+            .catch(err => popupError(err));
     }
     else {
         popupError("Cannot save an empty song");
@@ -284,25 +286,25 @@ function loadSequence() {
             throw res.errors;
         }
     })
-    .catch(err => popupError(err));
+        .catch(err => popupError(err));
 }
 
-function showSaveSongPopup(){
-    document.querySelector('.popup-mask').style.display="initial";
-    document.querySelector('.save-popup').style.display="initial";
+function showSaveSongPopup() {
+    document.querySelector('.popup-mask').style.display = "initial";
+    document.querySelector('.save-popup').style.display = "initial";
 }
 
-function showLoadSongPopup(){
+function showLoadSongPopup() {
     document.querySelector('.load-button').addEventListener("click", loadSequence);
-    document.querySelector('.popup-mask').style.display="initial";
-    document.querySelector('.load-popup').style.display="initial";
+    document.querySelector('.popup-mask').style.display = "initial";
+    document.querySelector('.load-popup').style.display = "initial";
 }
 
-function hidePopup(){
-    document.querySelector('.popup-mask').style.display="none";
+function hidePopup() {
+    document.querySelector('.popup-mask').style.display = "none";
     document.querySelector('.load-button').removeEventListener("click", loadSequence);
-    document.querySelector('.save-popup').style.display="none";
-    document.querySelector('.load-popup').style.display="none";
+    document.querySelector('.save-popup').style.display = "none";
+    document.querySelector('.load-popup').style.display = "none";
     clipboard_element.style.visibility = "hidden";
     error_message_element.forEach(p => p.style.visibility = 'hidden');
 }
