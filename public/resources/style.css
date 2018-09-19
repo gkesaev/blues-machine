@@ -333,7 +333,7 @@ footer{
     box-shadow: 2px 2px #999999;
 }
 .hidden{
-    display: none;
+    visibility: hidden;
 }
 
 @media all and (max-width: 650px){
