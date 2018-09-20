@@ -13,7 +13,7 @@ window.onload = () => {
     }
 };
 var context = new AudioContext();
-var interval = 2;           // duration
+var interval = 2;
 var isPaused = false;
 var keepPlaying = false;
 var playedNote = -1;
@@ -192,20 +192,23 @@ function playing() {
                 unMarkPlayedNotes(c);
                 playing();
             }
-        }, interval + buffer[playedNote]._duration * 500); //magic number
+        }, interval + buffer[playedNote]._duration * 500);
+
+        if (playedNote == buffer.length - 1){
+            stopPlay();
+        }
     }
 }
 
 function startPlay() {
-    if(isPaused == false){
-
-    }
-    else{
+    if(isPaused){
         unMarkPlayedNotes();
         isPaused = false;
     }
-    keepPlaying = true;
-    playing();
+    if(!keepPlaying){
+        keepPlaying = true;
+        playing();
+    }
 }
 
 function stopPlay() {
