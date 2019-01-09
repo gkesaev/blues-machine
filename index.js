@@ -22,7 +22,7 @@ app.use(bodyParser.json({ type: 'application/json' }))
     .use(express.urlencoded({ extended: false }))
     .use('/song', songRouter)
     .use('/', express.static(path.join(__dirname, 'public')))
-    .get('/countSongs', countSongsInCollection);;
+    .get('/countSongs', countSongsInCollection);
 
 // load credentials from file for local use or process.env if on heroku
 if (fs.existsSync('./credentials.json')) {
@@ -163,7 +163,7 @@ function countSongsInCollection (req, res){
         result.then(r => {
             res.setHeader('Content-Type', 'application/json');
             res.statusCode = 200;
-            console.log('There are ' + r + "songs saved in db.");
+            console.log('There are ' + r + " songs saved in db.");
             res.json(r);
         }).catch(err => {
             console.error("Count failed: " + err);
