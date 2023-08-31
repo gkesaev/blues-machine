@@ -28,7 +28,7 @@
     "fs-extra": "^10.1.0",
     "log-request": "0.0.1",
     "moment": "^2.29.2",
-    "mongodb": "^4.8.1",
+    "mongodb": "^4.17.0",
     "nodemon": "^2.0.19",
     "prompt-sync": "^4.2.0",
     "to": "^0.2.9",
