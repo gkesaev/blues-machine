@@ -22,20 +22,20 @@
     "url": "https://github.com/GeorgeKesaev/blues-machine/issues"
   },
   "homepage": "https://github.com/GeorgeKesaev/blues-machine#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "dependencies": {
-    "body-parser": "^1.20.3",
-    "express": "^4.21.1",
-    "fs-extra": "^10.1.0",
+    "express": "^5.1.0",
+    "fs-extra": "^11.3.2",
     "log-request": "0.0.1",
-    "moment": "^2.29.2",
-    "mongodb": "^4.17.0",
-    "nodemon": "^2.0.19",
-    "prompt-sync": "^4.2.0",
-    "to": "^0.2.9",
-    "update": "^0.7.4"
+    "mongodb": "^7.0.0",
+    "nodemon": "^3.1.11",
+    "prompt-sync": "^4.2.0"
   },
   "devDependencies": {
-    "jasmine": "^3.9.0",
-    "jasmine-core": "^3.9.0"
+    "jasmine": "^5.5.0",
+    "jasmine-core": "^5.5.0"
   }
 }

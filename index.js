@@ -4,21 +4,18 @@ const path = require('path');
 const PORT = process.env.PORT || 8000;
 const max_notes = 1000;
 
-let moment = require('moment');
 let logRequest = require('log-request');
 let express = require('express');
-let bodyParser = require('body-parser');
 let fs = require('fs');
 let MongoClient = require('mongodb').MongoClient;
-let ObjectID = require('mongodb').ObjectID;
+let ObjectId = require('mongodb').ObjectId;
 
 let songRouter = express.Router();
 songRouter.get('/:id', findSongByID);
 songRouter.post('/', storeSong);
 
 let app = express();        // https://expressjs.com/en/guide/routing.html
-app.use(bodyParser.json({ type: 'application/json' }))
-    .use(express.json())
+app.use(express.json())
     .use(express.urlencoded({ extended: false }))
     .use('/song', songRouter)
     .use('/', express.static(path.join(__dirname, 'public')))
@@ -39,8 +36,8 @@ const mongo_uri = 'mongodb+srv://' + credentials.mongoUser + ':' +
             + "?retryWrites=true";
 
 function storeSong(req, res) {
-    console.log(moment().format() + " requested to save a song");
-    MongoClient.connect(mongo_uri, { useNewUrlParser: true }, function (err, db) {
+    console.log(new Date().toISOString() + " requested to save a song");
+    MongoClient.connect(mongo_uri, function (err, db) {
         // assert.equal(null, err);
         if (err) {
             console.error(err);
@@ -65,7 +62,7 @@ function storeSong(req, res) {
                     }
                     res.setHeader('Content-Type', 'application/json');
                     res.statusCode = 201;
-                    let saved_song_id = result.ops[0]._id;
+                    let saved_song_id = result.insertedId;
                     console.log("one song inserted into db, song id: " + saved_song_id);
                     res.json(saved_song_id);
                     db.close();
@@ -93,7 +90,7 @@ function findSongByID(req, res) {
     let song_id = req.params.id
     console.log("Requested to load/get a song" + song_id);
 
-    MongoClient.connect(mongo_uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(mongo_uri, function (err, db) {
         if (err){
             console.error(err);
             res.statusCode = 500;
@@ -106,7 +103,7 @@ function findSongByID(req, res) {
         // if string might be object ID on mongo, regex expression
         if (song_id.match(/^[0-9a-fA-F]{24}$/)) {
             const dbo = db.db("blues-notes");
-            dbo.collection("notes").findOne({ _id: new ObjectID(song_id) }, (err, result) => {
+            dbo.collection("notes").findOne({ _id: new ObjectId(song_id) }, (err, result) => {
                 if (err) {
                     console.error(err);
                     res.statusCode = 500;
@@ -148,7 +145,7 @@ function findSongByID(req, res) {
 function countSongsInCollection (req, res){
     console.log("Counting songs");
 
-    MongoClient.connect(mongo_uri, { useNewUrlParser: true }, function (err, db) {
+    MongoClient.connect(mongo_uri, function (err, db) {
         if (err) {
             console.error(err);
             res.statusCode = 500;
@@ -176,8 +173,8 @@ function countSongsInCollection (req, res){
 }
 
 app.get('/api/moment', logRequest, (req, res) => {
-    console.log(moment().format() + " test moment for fun");
-    res.send(moment().format());
+    console.log(new Date().toISOString() + " test moment for fun");
+    res.send(new Date().toISOString());
     // handleMoment(req, res, req.query); //TODO: remove
 });
 
