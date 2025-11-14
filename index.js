@@ -182,11 +182,11 @@ app.get('/the-answer', logRequest, (req, res) => {
     res.send(String(42));
 });
 
-// instead of sending 400
-app.get('*', function (req, res) {
+// instead of sending 400 - catch all unmatched routes
+app.use(function (req, res) {
     res.setHeader('Content-Type', 'text/html');
     res.statusCode = 400;
-    res.sendFile(path.join(__dirname, '42.html'));
+    res.sendFile(path.join(__dirname, 'public', '42.html'));
 });
 
 const server = app.listen(PORT, "", function () {
